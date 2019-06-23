@@ -15,19 +15,12 @@ export class PictureDisplayer extends Component {
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
   };
-  constructor(props) {
-    super(props);
-    this.state = {
-      translateX: props.isDrawing.translateX,
-      translateY: props.isDrawing.translateY
-    }
-  }
-  calculatePosition(deltaX, deltaY, screenHeight,screenWidth) {
-      let {translateX,translateY }= this.state;
-      const scaleInt = this.props.scaleInt;
+  calculatePosition(deltaX, deltaY, screenHeight,screenWidth, translateX,translateY) {
+    let newX = translateX, newY = translateY;
+    const scaleInt = this.props.scaleInt;
       if(scaleInt !== 1){
-          translateX = translateX + deltaX ;
-          translateY = translateY + deltaY;
+          newX = translateX + deltaX ;
+          newY = translateY + deltaY;
           // const maxTop = scaleInt*screenHeight;
           // if(translateY > maxTop){
           //     translateY = maxTop;
@@ -45,12 +38,16 @@ export class PictureDisplayer extends Component {
           //     translateX = 0;
           // }
       }
-      this.setState({translateX: translateX,translateY: translateY});
+      return {translateX: newX,translateY: newY};
   } 
 
   onComponentDragMove(param) {
-      this.calculatePosition(param.deltaX, param.deltaY, this.screenHeight, this.screenWidth);
-  }
+      let changedTranslate = this.calculatePosition(param.deltaX, param.deltaY, 
+        this.screenHeight, this.screenWidth,
+        this.props.isDrawing.translateX,
+        this.props.isDrawing.translateY );
+      this.props.actions.dragMove(changedTranslate);
+    }
 
   returnDrawingStatus(){
       return this.props;
@@ -78,7 +75,7 @@ export class PictureDisplayer extends Component {
   render() {
     const scaleInt = this.props.scaleInt;
     const {height, width, path} = this.props.imageInfo;
-    const {translateX, translateY} = this.state;
+    const {translateX, translateY} = this.props.isDrawing;
     const isDrawing = this.props.isDrawing.processing;
     let picStyle = {backgroundImage: path,
         transform: `translate(${translateX}px, ${translateY}px) scale(${scaleInt})`,

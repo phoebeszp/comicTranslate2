@@ -4,6 +4,12 @@ export function clickDrawPen(){
       type: COMIC_CLICK_DRAW_PEN
     }
   }
+  export function addComments(value){
+    return {
+      type:COMIC_ADD_COMMENTS,
+      value
+    }
+  }
   export function reducer(state, action) {
     switch (action.type) {
       case COMIC_CLICK_DRAW_PEN:
@@ -17,9 +23,4 @@ export function clickDrawPen(){
         return state;
     }
   }
-  export function addComments(value){
-    return {
-      type:COMIC_ADD_COMMENTS,
-      value
-    }
-  }
+  
