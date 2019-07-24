@@ -15,7 +15,7 @@ export class PictureDisplayer extends Component {
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
   };
-  calculatePosition(deltaX, deltaY, screenHeight,screenWidth, translateX,translateY) {
+  calculatePosition(deltaX, deltaY, screenHeight,screenWidth, translateX, translateY) {
     let newX = translateX, newY = translateY;
     const scaleInt = this.props.scaleInt;
       if(scaleInt !== 1){
@@ -35,7 +35,7 @@ export class PictureDisplayer extends Component {
           //         translateX = -1*maxLeft;
           //     }
           // } else {
-          //     translateX = 0;
+          //     newY = 0;
           // }
       }
       return {translateX: newX,translateY: newY};
@@ -52,7 +52,7 @@ export class PictureDisplayer extends Component {
   returnDrawingStatus(){
       return this.props;
   }
-  componentDidUpdate(){
+  componentDidUpdate() {
       let rectData = {"id":"a16165f9-fa24-41e2-91a4-a1f2b82efa82","tool":"rectangle","color":"#ff8040","size":5,"fill":"","start":{"x":60.763885498046875,"y":47},"end":{"x":196.76388549804688,"y":207}};
       ShetchManager.draw(rectData);
       this.screenHeight = this.refs["picContainerParent"].offsetHeight;
@@ -62,7 +62,7 @@ export class PictureDisplayer extends Component {
     DragManager.register(this.refs["container"], this.onComponentDragMove.bind(this), this.returnDrawingStatus.bind(this));
     ShetchManager.register(this.refs["canvas"], this.returnDrawingStatus.bind(this), this._callbackOfFinishDrawing.bind(this));
   }
-  _callbackOfFinishDrawing(rectData){
+  _callbackOfFinishDrawing(rectData) {
     this.props.actions.addComments(rectData);
   }
   componentWillMount(){

@@ -1,10 +1,6 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import homeReducer from '../features/home/redux/reducer';
-import commonReducer from '../features/common/redux/reducer';
-import examplesReducer from '../features/examples/redux/reducer';
 import comicTranslateReducer from '../features/comic-translate/redux/reducer';
-import testaaaReducer from '../features/testaaa/redux/reducer';
 
 // NOTE 1: DO NOT CHANGE the 'reducerMap' name and the declaration pattern.
 // This is used for Rekit cmds to register new features, remove features, etc.
@@ -13,11 +9,7 @@ import testaaaReducer from '../features/testaaa/redux/reducer';
 
 const reducerMap = {
   router: routerReducer,
-  home: homeReducer,
-  common: commonReducer,
-  examples: examplesReducer,
-  comicTranslate: comicTranslateReducer,
-  testaaa: testaaaReducer
+  comicTranslate: comicTranslateReducer
 };
 
 export default combineReducers(reducerMap);

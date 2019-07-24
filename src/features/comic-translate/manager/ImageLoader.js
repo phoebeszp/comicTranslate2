@@ -1,10 +1,10 @@
 
 import imageA from '../images/aa.jpg';
-import imageB from '../images/e.jpg';
-import imageC from '../images/cc.jpg';
-import imageD from '../images/d.jpg';
+// import imageB from '../images/e.jpg';
+// import imageC from '../images/cc.jpg';
+// import imageD from '../images/d.jpg';
 
-var imageList = [imageA, imageB, imageC, imageD];
+var imageList = [imageA];
 
 export default class ImageLoader {
 

@@ -1,4 +1,11 @@
 {
   "presets": ["react-app"],
-  "plugins": ["react-hot-loader/babel", "syntax-dynamic-import", "lodash"]
+  "plugins": ["react-hot-loader/babel", "syntax-dynamic-import", "lodash",  
+    ["import",
+      {
+          "libraryName": "antd",
+          "style": "true"
+      }
+    ],
+    "transform-runtime"]
 }
