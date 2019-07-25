@@ -18,7 +18,18 @@ export function clickDrawPen(){
           isDrawing: {...state.isDrawing, processing:!state.isDrawing.processing}
         };
       case COMIC_ADD_COMMENTS:
-          return {...state, selectedComment:{...state.selectedComment, rectData:action.value, content:'new comment'}};
+          return {
+            ...state,
+            comment:{
+              ...state.comment,
+              newComment:{
+                ...state.comment.newComment,
+                rectData: action.value[0],
+
+              },
+              defaultActiveTab: "1"
+            }
+          }
       default:
         return state;
     }

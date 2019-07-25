@@ -15,8 +15,14 @@ const initialState = {
         translateX: 0,
         translateY: 0
     },
-    comments:[],
-    selectedComment: {}
+    comment:{
+        list: [],
+        newComment: {
+            tr_content: "",
+            rectData:""
+        },
+        defaultActiveTab: "2"
+    }
 };
 
 export default initialState;
