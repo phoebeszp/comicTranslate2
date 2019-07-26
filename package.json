@@ -69,8 +69,11 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "predeploy": "npm run-script build",
+    "deploy": "gh-pages -d build"
   },
+  "homepage": "https://phoebeszp.github.io/comicTranslate2/",
   "rekit": {
     "devPort": 6075,
     "studioPort": 6076,
