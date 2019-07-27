@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
-import { stat } from 'fs';
 export  class SidePanel extends Component {
   static propTypes = {
     defaultActiveKey: PropTypes.string.isRequired,
@@ -21,17 +20,18 @@ export  class SidePanel extends Component {
     return (
       <div className="comic-translate-side-panel">
         <Tabs activeKey={this.props.defaultActiveKey} >
-          <TabPane tab="创建中" key="1" >
+          <TabPane tab="New" key="1" >
             <TextArea placeholder="input here"
               className="custom"
+              autosize={{ minRows: 6}}
               style={{ height: 100 }}
               value={this.props.tr_content}
               onChange={this.changeComment.bind(this)}
               ></TextArea>
-              <Button type="primary" onClick={this.props.actions.saveComment}>保存</Button>
-              <Button>取消</Button>
+                <Button size='small' type="primary" onClick={this.props.actions.saveComment}>Save</Button>
+                <Button size='small' onClick={this.props.actions.cancelComment}>Cancel</Button>
           </TabPane>
-          <TabPane tab="已标记" key="2" >
+          <TabPane tab="List" key="2" >
             <List
             itemLayout="horizontal"
             dataSource={this.props.comments}

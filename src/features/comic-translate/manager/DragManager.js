@@ -59,7 +59,7 @@ function handleMouseMoveWrapper(mouseMoveHandler) {
 function handleMouseDownWrapper(checkDrawingStatus){
     return function(e){
         let is_drawing = checkDrawingStatus().isDrawing.processing;
-        if(!is_drawing){
+        if(is_drawing>0){
             handleMouseDown(e);
         }
     }

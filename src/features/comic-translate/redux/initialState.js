@@ -11,7 +11,7 @@ const initialState = {
     scaleInt: 1, 
     color: '#fffffff',
     isDrawing: {
-        processing: false, 
+        processing: 2, // 2: not scketch, 1:add comment, 0:processing
         translateX: 0,
         translateY: 0
     },

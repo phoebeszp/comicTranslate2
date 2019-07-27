@@ -6,6 +6,7 @@ import * as actions from './redux/actions';
 import ImageLoader from './manager/ImageLoader';
 import ShetchManager from './manager/ShetchManager';
 import DragManager from './manager/DragManager';
+import { findDOMNode } from 'react-dom'
 
 export class PictureDisplayer extends Component {
   static propTypes = {
@@ -14,6 +15,7 @@ export class PictureDisplayer extends Component {
     color: PropTypes.string.isRequired,
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    rectList: PropTypes.array.isRequired
   };
   calculatePosition(deltaX, deltaY, screenHeight,screenWidth, translateX, translateY) {
     let newX = translateX, newY = translateY;
@@ -52,15 +54,27 @@ export class PictureDisplayer extends Component {
   returnDrawingStatus(){
       return this.props;
   }
+  shouldComponentUpdate(nextProps) {
+    if(nextProps.isDrawing.processing === 1 && this.props.isDrawing.processing === 0){
+      return false;
+    }
+    return true;
+  }
   componentDidUpdate() {
-      let rectData = {"id":"a16165f9-fa24-41e2-91a4-a1f2b82efa82","tool":"rectangle","color":"#ff8040","size":5,"fill":"","start":{"x":60.763885498046875,"y":47},"end":{"x":196.76388549804688,"y":207}};
-      ShetchManager.draw(rectData);
+      //let rectData = {"id":"a16165f9-fa24-41e2-91a4-a1f2b82efa82","tool":"rectangle","color":"#ff8040","size":5,"fill":"","start":{"x":60.763885498046875,"y":47},"end":{"x":196.76388549804688,"y":207}};
+      ShetchManager.clearRect();
       this.screenHeight = this.refs["picContainerParent"].offsetHeight;
       this.screenWidth = this.refs["picContainerParent"].offsetWidth;
+      const list = this.props.rectList;
+      list.forEach(item => {
+        if(item.rectData){
+          ShetchManager.draw(item.rectData);
+        }
+      });
   }
   componentDidMount() {
     DragManager.register(this.refs["container"], this.onComponentDragMove.bind(this), this.returnDrawingStatus.bind(this));
-    ShetchManager.register(this.refs["canvas"], this.returnDrawingStatus.bind(this), this._callbackOfFinishDrawing.bind(this));
+    ShetchManager.register(findDOMNode(this.refs["canvas"]), this.returnDrawingStatus.bind(this), this._callbackOfFinishDrawing.bind(this));
   }
   _callbackOfFinishDrawing(rectData) {
     this.props.actions.addComments(rectData);
@@ -76,7 +90,7 @@ export class PictureDisplayer extends Component {
     const scaleInt = this.props.scaleInt;
     const {height, width, path} = this.props.imageInfo;
     const {translateX, translateY} = this.props.isDrawing;
-    const isDrawing = this.props.isDrawing.processing;
+    const isDrawing = this.props.isDrawing.processing < 1;
     let picStyle = {backgroundImage: path,
         transform: `translate(${translateX}px, ${translateY}px) scale(${scaleInt})`,
         width: `${width}px`,
@@ -98,7 +112,8 @@ function mapStateToProps(state) {
     imageInfo: state.comicTranslate.selectedImage,
     scaleInt: state.comicTranslate.scaleInt,
     color: state.comicTranslate.color,
-    isDrawing: state.comicTranslate.isDrawing
+    isDrawing: state.comicTranslate.isDrawing,
+    rectList : state.comicTranslate.comment.list
   };
 }
 

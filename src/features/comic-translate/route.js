@@ -5,10 +5,22 @@ import {
   DefaultPage,
 } from './';
 
+// export default {
+//   path: 'comic-translate',
+//   name: 'Comic translate',
+//   childRoutes: [
+//     { path: 'default-page', name: 'Default page', component: DefaultPage, isIndex: true },
+//   ],
+// };
 export default {
-  path: 'comic-translate',
-  name: 'Comic translate',
+  path: '/',
+  name: 'ComicTranslate',
+  component: DefaultPage,
   childRoutes: [
-    { path: 'default-page', name: 'Default page', component: DefaultPage, isIndex: true },
+    { path: 'default-page',
+      name: 'Default page',
+      component: DefaultPage,
+      isIndex: true,
+    },
   ],
 };

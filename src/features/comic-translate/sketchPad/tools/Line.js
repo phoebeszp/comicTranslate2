@@ -20,6 +20,7 @@ export default (context) => {
   };
 
   const drawLine = (item, x, y) => {
+    
     context.save();
     context.lineJoin = 'round';
     context.lineCap = 'round';

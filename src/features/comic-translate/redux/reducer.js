@@ -7,13 +7,9 @@
 // https://medium.com/@nate_wang/a-new-approach-for-managing-redux-actions-91c26ce8b5da.
 
 import initialState from './initialState';
-import {reducer as changeDisplayImageReducer} from './changeDisplayImage';
 import {reducer as changeScale} from './changeScale';
-import {reducer as clickDrawPen} from './clickDrawPen';
 const reducers = [
-  changeDisplayImageReducer,
-  changeScale,
-  clickDrawPen
+  changeScale
 ];
 
 export default function reducer(state = initialState, action) {

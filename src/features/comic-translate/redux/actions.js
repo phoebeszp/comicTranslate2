@@ -1,3 +1,8 @@
-export {changeDisplayImage} from './changeDisplayImage';
-export {changeScale, changeColor, dragMove, changeComment, saveComment} from './changeScale';
-export {clickDrawPen, addComments} from './clickDrawPen';
+export {clickDrawPen, 
+    changeDisplayImage,changeScale, 
+    changeColor, 
+    dragMove, 
+    addComments, 
+    changeComment, 
+    saveComment, 
+    cancelComment} from './changeScale';
