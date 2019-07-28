@@ -19,36 +19,36 @@ export class DetailInfo extends Component {
         <div className = 'resourceDetail'>
           <Row gutter={16}>
           <Col className="gutter-row" span={8}>
-            <div>书籍编号：{bookNO}</div>
+            <div>Booke Number:{bookNO}</div>
           </Col>
           <Col className="gutter-row" span={8}>
-            <div >书籍名称：</div>
+            <div >Booke Name:</div>
           </Col>
           </Row>
           <Row gutter={16}>
             <Col className="gutter-row" span={8}>
-              <div>章节编号：</div>
+              <div>Chapter Number:</div>
             </Col>
             <Col className="gutter-row" span={8}>
-              <div>章节名称：</div>
+              <div>Chapter Name:</div>
             </Col>
             </Row>
           <Row gutter={16}>
             <Col className="gutter-row" span={8}>
-              <div>资源编号：</div>
+              <div>Resource Number:</div>
             </Col>
             <Col className="gutter-row" span={8}>
-              <div>当前进度：</div>
+              <div>Status:</div>
             </Col>
           </Row>
         </div>
         <div >
           <Upload className = 'uploadBtnStyle'>
             <Button size='small'>
-              <Icon type="upload" /> 上传设计图
+              <Icon type="upload" /> Upload Design
             </Button>
           </Upload >
-          <Button className = 'vocabularyBtnStyle' size='small'>词汇表</Button>
+          <Button className = 'vocabularyBtnStyle' size='small'>Vacabulary</Button>
         </div>
       </div>
     );

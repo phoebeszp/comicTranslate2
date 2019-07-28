@@ -5,4 +5,7 @@ export {clickDrawPen,
     addComments, 
     changeComment, 
     saveComment, 
-    cancelComment} from './changeScale';
+    cancelComment,
+    removeComment,
+    showSelectedComment
+} from './changeScale';

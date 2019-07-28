@@ -67,13 +67,13 @@ function handleMouseDownWrapper(checkDrawingStatus){
 export default class DragManager {
     static register(domRef, mouseMoveHandler, onDrawing) {
         domRef.addEventListener("mousedown", handleMouseDownWrapper(onDrawing), false);
-        domRef.addEventListener("touchstart", handleMouseDownWrapper(onDrawing), false);
+        // domRef.addEventListener("touchstart", handleMouseDownWrapper(onDrawing), false);
 
-        doc.addEventListener("touchend", handleMouseUp, false);
+        // doc.addEventListener("touchend", handleMouseUp, false);
         doc.addEventListener("mouseup", handleMouseUp, false);
 
         var mouseMoveProxy = handleMouseMoveWrapper(mouseMoveHandler);
-        doc.addEventListener("touchmove", mouseMoveProxy, false);
+        // doc.addEventListener("touchmove", mouseMoveProxy, false);
         doc.addEventListener("mousemove", mouseMoveProxy, false);
     }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Button, Input, Tabs } from 'antd';
+import { List, Button, Input, Tabs,Modal } from 'antd';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -11,14 +11,40 @@ export  class SidePanel extends Component {
     comments: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
   };
+    state = { visible: false, selectedItem:{} };
+  
   changeComment(e){
     this.props.actions.changeComment(e.target.value);
   }
+  editComment(item){
+    this.props.actions.showSelectedComment(item);
+  }
+  removeComment(commentItem){
+    this.setState({ visible: true, selectedItem: commentItem });
+  }
+
+  handleModal(confirmed){
+    if(confirmed){
+      this.props.actions.removeComment(this.state.selectedItem.rectData);
+    }
+    this.setState({ visible: false });
+  }
+  
   render() {
     const { TabPane } = Tabs;
     const { TextArea } = Input;
     return (
       <div className="comic-translate-side-panel">
+        <Modal
+          title="Warning"
+          visible={this.state.visible}
+          onOk={()=>this.handleModal(true)}
+          onCancel={()=>this.handleModal(false)}
+          okText="确认"
+          cancelText="取消"
+        >
+          <p>Are you sure remove this item?</p>
+        </Modal>
         <Tabs activeKey={this.props.defaultActiveKey} >
           <TabPane tab="New" key="1" >
             <TextArea placeholder="input here"
@@ -36,11 +62,11 @@ export  class SidePanel extends Component {
             itemLayout="horizontal"
             dataSource={this.props.comments}
             renderItem={item => (
-              <List.Item  actions={[<Button icon='edit'></Button>,
-              <Button icon='delete'></Button>]} >
+              <List.Item  actions={[<Button icon='edit' onClick={()=>{this.editComment(item)}} ></Button>, 
+              <Button icon='delete' onClick={()=>{this.removeComment(item)}} ></Button>]} >
                 <List.Item.Meta
                   title={item.title}
-                  description={item.description}
+                  description={item.tr_content}
                 />
               </List.Item>
             )}

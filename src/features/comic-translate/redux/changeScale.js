@@ -6,8 +6,18 @@ import { COMIC_CHANGE_DISPLAY_IMAGE,
   COMIC_SAVE_COMMENT, 
   COMIC_CANCEL_COMMENT,
   COMIC_CLICK_DRAW_PEN, 
-  COMIC_ADD_COMMENTS} from './constants';
+  COMIC_ADD_COMMENTS,
+  COMIC_REMOVE_COMMENT,
+  COMIC_SHOW_SELECTED_COMMENT,
+} from './constants';
+import { func } from 'prop-types';
 
+export function removeComment(value){
+  return {
+    type: COMIC_REMOVE_COMMENT,
+    value
+  }
+}
 export function saveComment(){
   return {
     type: COMIC_SAVE_COMMENT
@@ -43,6 +53,7 @@ export function dragMove(value){
     value
   }
 }
+
 export function changeDisplayImage(value) {
   return {
     type: COMIC_CHANGE_DISPLAY_IMAGE,
@@ -60,11 +71,16 @@ export function addComments(value){
     value
   }
 }
+export function showSelectedComment(value){
+  return {
+    type: COMIC_SHOW_SELECTED_COMMENT,
+    value
+  }
+}
 export function reducer(state, action) {
   switch (action.type) {
     case COMIC_CHANGE_SCALE:
       const {height, width} = state.selectedImage;
-      const {translateX,translateY} = state.isDrawing;
       const newScaleInt = action.value;
       return {
         ...state,
@@ -95,8 +111,19 @@ export function reducer(state, action) {
             ...state.comment,
             newComment:{
               ...state.comment.newComment,
-              tr_content: action.value
-            }
+              tr_content: action.value,
+            },
+            defaultActiveTab: "1"
+          }
+        };
+      case COMIC_SHOW_SELECTED_COMMENT:
+        const selectedItem = state.comment.list.find(item => item.id === action.value.id);
+        return {
+          ...state,
+          comment:{
+            ...state.comment,
+            newComment: selectedItem,
+            defaultActiveTab: "1"
           }
         };
       case COMIC_CANCEL_COMMENT:
@@ -115,21 +142,49 @@ export function reducer(state, action) {
             processing: 0
           }
         };
+     
     case COMIC_SAVE_COMMENT:
       const newDate = new Date();
+      const newComment = state.comment.newComment;
+      const selectedId = newComment.id;
+      if(selectedId){ //edit
+        return {...state, comment:{
+          ...state.comment,
+          list: state.comment.list.map(item => {
+            if(item.id === selectedId){
+              return {...item,
+                id: selectedId,
+                rectData: newComment.rectData, 
+                tr_content: newComment.tr_content,
+                title :  `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
+              }
+            }
+            return item;
+          }),
+          newComment:{
+            ...state.comment.newComment,
+            tr_content: "",
+            rectData: "",
+            id:''
+          },
+          defaultActiveTab: "2"
+        }};
+      }
       return {
         ...state,
         comment:{
           ...state.comment,
             list:[...state.comment.list, {
-              rectData: state.comment.newComment.rectData, 
-              description: state.comment.newComment.tr_content,
+              id: newComment.rectData.id,
+              rectData: newComment.rectData, 
+              tr_content: newComment.tr_content,
               title: `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
             }],
             newComment:{
               ...state.comment.newComment,
               tr_content: "",
-              rectData: ""
+              rectData: "",
+              id:''
             },
             defaultActiveTab: "2"
         },
@@ -138,6 +193,13 @@ export function reducer(state, action) {
           processing: 0
         }
       };
+      case COMIC_REMOVE_COMMENT: 
+        return {...state, 
+                comment:{
+                  ...state.comment,
+                    list: state.comment.list.filter(item=> item.rectData.id !== action.value.id )
+                  }
+                }
       case COMIC_CHANGE_DISPLAY_IMAGE:
         return {
           ...state,
