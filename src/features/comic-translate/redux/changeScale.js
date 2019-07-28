@@ -9,6 +9,7 @@ import { COMIC_CHANGE_DISPLAY_IMAGE,
   COMIC_ADD_COMMENTS,
   COMIC_REMOVE_COMMENT,
   COMIC_SHOW_SELECTED_COMMENT,
+  COMIC_SHOW_SELECTED_RECT
 } from './constants';
 
 export function removeComment(value){
@@ -76,6 +77,12 @@ export function showSelectedComment(value){
     value
   }
 }
+export function showSelectedRect(value){
+  return {
+    type: COMIC_SHOW_SELECTED_RECT,
+    value
+  }
+}
 export function reducer(state, action) {
   switch (action.type) {
     case COMIC_CHANGE_SCALE:
@@ -125,6 +132,17 @@ export function reducer(state, action) {
             defaultActiveTab: "1"
           }
         };
+      case COMIC_SHOW_SELECTED_RECT:
+        const commentList = state.comment.list;
+        const selected =  action.value.id;
+        return {...state, comment:{...state.comment, list:commentList.map(item =>{
+          if(item.id === selected){
+            item.hidden = false;
+          }else {
+            item.hidden = true;
+          }
+          return item;}), onlyShowSelected: true
+        }}
       case COMIC_CANCEL_COMMENT:
         return {
           ...state,
@@ -134,6 +152,7 @@ export function reducer(state, action) {
               ...state.comment.newComment,
               tr_content: ""
             },
+            onlyShowSelected: false,
             defaultActiveTab: "2"
           },
           isDrawing: {
@@ -166,6 +185,7 @@ export function reducer(state, action) {
             rectData: "",
             id:''
           },
+          
           defaultActiveTab: "2"
         }};
       }
@@ -185,6 +205,7 @@ export function reducer(state, action) {
               rectData: "",
               id:''
             },
+            onlyShowSelected: false,
             defaultActiveTab: "2"
         },
         isDrawing: {
@@ -196,7 +217,8 @@ export function reducer(state, action) {
         return {...state, 
                 comment:{
                   ...state.comment,
-                    list: state.comment.list.filter(item=> item.rectData.id !== action.value.id )
+                    list: state.comment.list.filter(item=> item.rectData.id !== action.value.id ),
+                    onlyShowSelected: false,
                   }
                 }
       case COMIC_CHANGE_DISPLAY_IMAGE:

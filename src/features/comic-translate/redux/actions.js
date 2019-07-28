@@ -7,5 +7,6 @@ export {clickDrawPen,
     saveComment, 
     cancelComment,
     removeComment,
-    showSelectedComment
+    showSelectedComment,
+    showSelectedRect
 } from './changeScale';

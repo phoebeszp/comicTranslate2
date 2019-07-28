@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
+import {TodoItem} from './';
 export  class SidePanel extends Component {
   static propTypes = {
     defaultActiveKey: PropTypes.string.isRequired,
@@ -28,6 +29,9 @@ export  class SidePanel extends Component {
       this.props.actions.removeComment(this.state.selectedItem.rectData);
     }
     this.setState({ visible: false });
+  }
+  selectItem(item){
+    this.props.actions.showSelectedRect(item);
   }
   
   render() {
@@ -62,12 +66,11 @@ export  class SidePanel extends Component {
             itemLayout="horizontal"
             dataSource={this.props.comments}
             renderItem={item => (
-              <List.Item  actions={[<Button icon='edit' onClick={()=>{this.editComment(item)}} ></Button>, 
-              <Button icon='delete' onClick={()=>{this.removeComment(item)}} ></Button>]} >
-                <List.Item.Meta
-                  title={item.title}
-                  description={item.tr_content}
-                />
+             <List.Item> 
+                <TodoItem {...item} deleteItem={ () => this.removeComment(item)}
+                changeItem={ () => this.editComment(item)}
+                selectItem={ () => this.selectItem(item)}
+                ></TodoItem>
               </List.Item>
             )}
           />

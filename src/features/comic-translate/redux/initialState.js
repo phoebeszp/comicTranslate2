@@ -21,6 +21,7 @@ const initialState = {
             tr_content: "",
             rectData:""
         },
+        onlyShowSelected: false,
         defaultActiveTab: "2"
     }
 };

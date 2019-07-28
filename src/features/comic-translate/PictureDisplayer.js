@@ -15,7 +15,8 @@ export class PictureDisplayer extends React.PureComponent {
     color: PropTypes.string.isRequired,
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    rectList: PropTypes.array.isRequired
+    rectList: PropTypes.array.isRequired,
+    onlyShowSelected: PropTypes.bool.isRequired
   };
   calculatePosition(deltaX, deltaY, screenHeight,screenWidth, translateX, translateY) {
     let newX = translateX, newY = translateY;
@@ -59,8 +60,9 @@ export class PictureDisplayer extends React.PureComponent {
       if(this.props.isDrawing.processing !== 1){
         ShetchManager.clearRect();
         const list = this.props.rectList;
+        const onlyShowSelected = this.props.onlyShowSelected;
         list.forEach(item => {
-          if(item.rectData){
+          if(item.rectData && (!onlyShowSelected || !item.hidden)){
             ShetchManager.draw(item.rectData);
           }
         });
@@ -109,7 +111,8 @@ function mapStateToProps(state) {
     scaleInt: state.comicTranslate.scaleInt,
     color: state.comicTranslate.color,
     isDrawing: state.comicTranslate.isDrawing,
-    rectList : state.comicTranslate.comment.list
+    rectList : state.comicTranslate.comment.list,
+    onlyShowSelected : state.comicTranslate.comment.onlyShowSelected
   };
 }
 
