@@ -8,7 +8,7 @@ import ShetchManager from './manager/ShetchManager';
 import DragManager from './manager/DragManager';
 import { findDOMNode } from 'react-dom'
 
-export class PictureDisplayer extends Component {
+export class PictureDisplayer extends React.PureComponent {
   static propTypes = {
     imageInfo: PropTypes.object.isRequired,
     scaleInt: PropTypes.number.isRequired,
@@ -54,23 +54,19 @@ export class PictureDisplayer extends Component {
   returnDrawingStatus(){
       return this.props;
   }
-  shouldComponentUpdate(nextProps) {
-    if(nextProps.isDrawing.processing === 1 && this.props.isDrawing.processing === 0){
-      return false;
-    }
-    return true;
-  }
   componentDidUpdate() {
       //let rectData = {"id":"a16165f9-fa24-41e2-91a4-a1f2b82efa82","tool":"rectangle","color":"#ff8040","size":5,"fill":"","start":{"x":60.763885498046875,"y":47},"end":{"x":196.76388549804688,"y":207}};
-      ShetchManager.clearRect();
+      if(this.props.isDrawing.processing !== 1){
+        ShetchManager.clearRect();
+        const list = this.props.rectList;
+        list.forEach(item => {
+          if(item.rectData){
+            ShetchManager.draw(item.rectData);
+          }
+        });
+      }
       this.screenHeight = this.refs["picContainerParent"].offsetHeight;
       this.screenWidth = this.refs["picContainerParent"].offsetWidth;
-      const list = this.props.rectList;
-      list.forEach(item => {
-        if(item.rectData){
-          ShetchManager.draw(item.rectData);
-        }
-      });
   }
   componentDidMount() {
     DragManager.register(this.refs["container"], this.onComponentDragMove.bind(this), this.returnDrawingStatus.bind(this));

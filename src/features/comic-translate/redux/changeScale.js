@@ -10,7 +10,6 @@ import { COMIC_CHANGE_DISPLAY_IMAGE,
   COMIC_REMOVE_COMMENT,
   COMIC_SHOW_SELECTED_COMMENT,
 } from './constants';
-import { func } from 'prop-types';
 
 export function removeComment(value){
   return {

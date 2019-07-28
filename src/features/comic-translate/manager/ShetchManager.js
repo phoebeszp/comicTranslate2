@@ -38,7 +38,9 @@ function onMouseUp(e, callback) {
     }
     e.stopPropagation();
     startDrawing = false;
-    callback(data);
+    if(callback){
+        callback(data);
+    }
 }
 
 function getCursorPosition(e) {
