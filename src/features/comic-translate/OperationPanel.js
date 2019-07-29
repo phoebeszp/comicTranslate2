@@ -18,7 +18,8 @@ export class OperationPanel extends Component {
   render() {
     const Panel = Collapse.Panel;
     let scaleInt = this.props.scaleInt;
-    let isDrawing = this.props.isDrawing.processing;
+    let isDrawing = this.props.isDrawing.processing < 1;
+    let disableBtn = this.props.isDrawing.processing === 1;
     return (
       <div className="comic-translate-operation-panel">
         <Collapse defaultActiveKey={['1']} title='收起'>
@@ -33,11 +34,17 @@ export class OperationPanel extends Component {
                 }
               </Col>
               <Col span={8}>
-                <Button type={isDrawing?'primary':''} onClick={this.props.actions.clickDrawPen} size='small'>
+                <Button type={isDrawing?'primary':''} 
+                onClick={this.props.actions.clickDrawPen} 
+                disabled = {disableBtn}
+                size='small'>
                   <Icon type='edit' style={{color:this.props.color}} theme='filled'/>
                 </Button>
                 {
-                  COLORS.map(ele => <Button shape='circle' style={{backgroundColor: ele}}  key={ele+'key'} size='small'
+                  COLORS.map(ele => <Button shape='circle' style={{backgroundColor: ele}} 
+                  disabled = {disableBtn} 
+                  key={ele+'key'} 
+                  size='small'
                   onClick={()=> this.props.actions.changeColor(ele)}
                    ></Button>
                   )

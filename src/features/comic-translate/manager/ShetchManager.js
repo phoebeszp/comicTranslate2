@@ -38,7 +38,9 @@ function onMouseUp(e, callback) {
     }
     e.stopPropagation();
     startDrawing = false;
-    callback(data);
+    if(callback){
+        callback(data);
+    }
 }
 
 function getCursorPosition(e) {
@@ -55,7 +57,7 @@ function handleMouseDownWrapper(checkDrawingStatus){
         scaleInt = state.scaleInt;
         color = state.color;
         let is_drawing = state.isDrawing.processing;
-        if(is_drawing){
+        if(is_drawing<1){
             onMouseDown.call(doc,e);
         }
     }
@@ -77,5 +79,8 @@ export default class ShetchManager {
     }
     static draw(rectData){
         tool.draw(rectData);
+    }
+    static clearRect(){
+        tool.clear();
     }
 }

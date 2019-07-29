@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { List, Button, Input, Tabs } from 'antd';
+import { List, Button, Input, Tabs,Modal } from 'antd';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
-import { stat } from 'fs';
 export  class SidePanel extends Component {
   static propTypes = {
     defaultActiveKey: PropTypes.string.isRequired,
@@ -12,35 +11,62 @@ export  class SidePanel extends Component {
     comments: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
   };
+    state = { visible: false, selectedItem:{} };
+  
   changeComment(e){
     this.props.actions.changeComment(e.target.value);
   }
+  editComment(item){
+    this.props.actions.showSelectedComment(item);
+  }
+  removeComment(commentItem){
+    this.setState({ visible: true, selectedItem: commentItem });
+  }
+
+  handleModal(confirmed){
+    if(confirmed){
+      this.props.actions.removeComment(this.state.selectedItem.rectData);
+    }
+    this.setState({ visible: false });
+  }
+  
   render() {
     const { TabPane } = Tabs;
     const { TextArea } = Input;
     return (
       <div className="comic-translate-side-panel">
+        <Modal
+          title="Warning"
+          visible={this.state.visible}
+          onOk={()=>this.handleModal(true)}
+          onCancel={()=>this.handleModal(false)}
+          okText="确认"
+          cancelText="取消"
+        >
+          <p>Are you sure remove this item?</p>
+        </Modal>
         <Tabs activeKey={this.props.defaultActiveKey} >
-          <TabPane tab="创建中" key="1" >
+          <TabPane tab="New" key="1" >
             <TextArea placeholder="input here"
               className="custom"
+              autosize={{ minRows: 6}}
               style={{ height: 100 }}
               value={this.props.tr_content}
               onChange={this.changeComment.bind(this)}
               ></TextArea>
-              <Button type="primary" onClick={this.props.actions.saveComment}>保存</Button>
-              <Button>取消</Button>
+                <Button size='small' type="primary" onClick={this.props.actions.saveComment}>Save</Button>
+                <Button size='small' onClick={this.props.actions.cancelComment}>Cancel</Button>
           </TabPane>
-          <TabPane tab="已标记" key="2" >
+          <TabPane tab="List" key="2" >
             <List
             itemLayout="horizontal"
             dataSource={this.props.comments}
             renderItem={item => (
-              <List.Item  actions={[<Button icon='edit'></Button>,
-              <Button icon='delete'></Button>]} >
+              <List.Item  actions={[<Button icon='edit' onClick={()=>{this.editComment(item)}} ></Button>, 
+              <Button icon='delete' onClick={()=>{this.removeComment(item)}} ></Button>]} >
                 <List.Item.Meta
                   title={item.title}
-                  description={item.description}
+                  description={item.tr_content}
                 />
               </List.Item>
             )}

@@ -5,7 +5,7 @@ export const TOOL_RECTANGLE = 'rectangle';
 export default (context) => {
   let rectangle = null;
   let imageData = null;
-
+  // context.setLineDash([5]);
   const onMouseDown = (x, y, color, size, fill) => {
     rectangle = {
       id: v4(),
@@ -20,12 +20,14 @@ export default (context) => {
     return [rectangle];
   };
 
-  const drawRectangle = (item, mouseX, mouseY) => {
+  const drawRectangle = (item, mouseX, mouseY, isDottedLine = true) => {
     const startX = mouseX < item.start.x ? mouseX : item.start.x;
     const startY = mouseY < item.start.y ? mouseY : item.start.y;
     const widthX = Math.abs(item.start.x - mouseX);
     const widthY = Math.abs(item.start.y - mouseY);
-
+    if(isDottedLine){
+      context.setLineDash([5, 10]);
+    }
     context.beginPath();
     context.lineWidth = item.size;
     context.strokeStyle = item.color;
@@ -53,12 +55,16 @@ export default (context) => {
     return [item];
   };
 
-  const draw = item => drawRectangle(item, item.end.x, item.end.y);
-
+  const draw = item => drawRectangle(item, item.end.x, item.end.y, false);
+  
+  const clear = () => {
+    context.clearRect(0, 0, context.canvas.clientWidth, context.canvas.clientHeight);
+  }
   return {
     onMouseDown,
     onMouseMove,
     onMouseUp,
     draw,
+    clear
   };
 };
