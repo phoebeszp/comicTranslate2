@@ -1,4 +1,5 @@
 theme: jekyll-theme-cayman
 deploy:
   type: git
-  repo: git@github.com:phoebeszp/comicTranslate2.git
+  repo: https://github.com/phoebeszp/comicTranslate2.git
+  branch: master

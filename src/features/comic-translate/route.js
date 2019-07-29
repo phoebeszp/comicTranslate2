@@ -5,6 +5,7 @@ import {
   DefaultPage,
 } from './';
 
+
 // export default {
 //   path: 'comic-translate',
 //   name: 'Comic translate',
@@ -12,6 +13,7 @@ import {
 //     { path: 'default-page', name: 'Default page', component: DefaultPage, isIndex: true },
 //   ],
 // };
+
 export default {
   path: '/',
   name: 'ComicTranslate',
