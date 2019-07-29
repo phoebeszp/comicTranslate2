@@ -138,8 +138,10 @@ export function reducer(state, action) {
         return {...state, comment:{...state.comment, list:commentList.map(item =>{
           if(item.id === selected){
             item.hidden = false;
+            item.selected = true;
           }else {
             item.hidden = true;
+            item.selected = false;
           }
           return item;}), onlyShowSelected: true
         }}
@@ -185,7 +187,7 @@ export function reducer(state, action) {
             rectData: "",
             id:''
           },
-          
+          onlyShowSelected: false,
           defaultActiveTab: "2"
         }};
       }
@@ -210,7 +212,7 @@ export function reducer(state, action) {
         },
         isDrawing: {
           ...state.isDrawing,
-          processing: 0
+          processing: 2
         }
       };
       case COMIC_REMOVE_COMMENT: 

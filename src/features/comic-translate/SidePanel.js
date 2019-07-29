@@ -10,6 +10,7 @@ export  class SidePanel extends Component {
     defaultActiveKey: PropTypes.string.isRequired,
     tr_content: PropTypes.string.isRequired,
     comments: PropTypes.array.isRequired,
+    onlyShowSelected: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
   };
     state = { visible: false, selectedItem:{} };
@@ -37,6 +38,7 @@ export  class SidePanel extends Component {
   render() {
     const { TabPane } = Tabs;
     const { TextArea } = Input;
+    const {comments, onlyShowSelected, tr_content, defaultActiveKey} = this.props;
     return (
       <div className="comic-translate-side-panel">
         <Modal
@@ -49,25 +51,26 @@ export  class SidePanel extends Component {
         >
           <p>Are you sure remove this item?</p>
         </Modal>
-        <Tabs activeKey={this.props.defaultActiveKey} >
+        <Tabs activeKey={defaultActiveKey} >
           <TabPane tab="New" key="1" >
             <TextArea placeholder="input here"
               className="custom"
               autosize={{ minRows: 6}}
               style={{ height: 100 }}
-              value={this.props.tr_content}
+              value={tr_content}
               onChange={this.changeComment.bind(this)}
               ></TextArea>
                 <Button size='small' type="primary" onClick={this.props.actions.saveComment}>Save</Button>
-                <Button size='small' onClick={this.props.actions.cancelComment}>Cancel</Button>
+                <Button size='small' onClick={this.props.cancelComment}>Cancel</Button>
           </TabPane>
           <TabPane tab="List" key="2" >
             <List
             itemLayout="horizontal"
-            dataSource={this.props.comments}
+            dataSource={comments}
             renderItem={item => (
              <List.Item> 
-                <TodoItem {...item} deleteItem={ () => this.removeComment(item)}
+                <TodoItem item={item} onlyShowSelected={onlyShowSelected}
+                deleteItem={ () => this.removeComment(item)}
                 changeItem={ () => this.editComment(item)}
                 selectItem={ () => this.selectItem(item)}
                 ></TodoItem>
@@ -85,7 +88,8 @@ function mapStateToProps(state) {
   return {
     defaultActiveKey: state.comicTranslate.comment.defaultActiveTab,
     tr_content: state.comicTranslate.comment.newComment.tr_content,
-    comments: state.comicTranslate.comment.list
+    comments: state.comicTranslate.comment.list,
+    onlyShowSelected: state.comicTranslate.comment.onlyShowSelected
   };
 }
 
