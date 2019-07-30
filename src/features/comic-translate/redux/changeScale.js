@@ -2,20 +2,26 @@ import { COMIC_CHANGE_DISPLAY_IMAGE,
   COMIC_CHANGE_SCALE, 
   COMIC_CHANGE_COLOR, 
   COMIC_DRAG_MOVE, 
+  COMIC_CLICK_DRAW_PEN, 
   COMIC_CHANGE_COMMENT,
   COMIC_SAVE_COMMENT, 
   COMIC_CANCEL_COMMENT,
-  COMIC_CLICK_DRAW_PEN, 
   COMIC_ADD_COMMENTS,
   COMIC_REMOVE_COMMENT,
   COMIC_SHOW_SELECTED_COMMENT,
-  COMIC_SHOW_SELECTED_RECT
+  COMIC_SHOW_SELECTED_RECT,
+  COMIC_DESELECT
 } from './constants';
 
 export function removeComment(value){
   return {
     type: COMIC_REMOVE_COMMENT,
     value
+  }
+}
+export function deSelectAll(){
+  return {
+    type: COMIC_DESELECT
   }
 }
 export function saveComment(){
@@ -130,21 +136,26 @@ export function reducer(state, action) {
             ...state.comment,
             newComment: selectedItem,
             defaultActiveTab: "1"
+          },
+          isDrawing: {
+            ...state.isDrawing,
+            processing: 1
           }
         };
       case COMIC_SHOW_SELECTED_RECT:
         const commentList = state.comment.list;
         const selected =  action.value.id;
-        return {...state, comment:{...state.comment, list:commentList.map(item =>{
+        return {...state, 
+          comment: {...state.comment, list:commentList.map(item =>{
           if(item.id === selected){
-            item.hidden = false;
             item.selected = true;
           }else {
-            item.hidden = true;
             item.selected = false;
           }
-          return item;}), onlyShowSelected: true
-        }}
+          return item;}), 
+          onlyShowSelected: true
+        }
+      }
       case COMIC_CANCEL_COMMENT:
         return {
           ...state,
@@ -154,7 +165,7 @@ export function reducer(state, action) {
               ...state.comment.newComment,
               tr_content: ""
             },
-            onlyShowSelected: false,
+            // onlyShowSelected: false,
             defaultActiveTab: "2"
           },
           isDrawing: {
@@ -168,28 +179,34 @@ export function reducer(state, action) {
       const newComment = state.comment.newComment;
       const selectedId = newComment.id;
       if(selectedId){ //edit
-        return {...state, comment:{
+        return {...state, 
+          comment:{
           ...state.comment,
           list: state.comment.list.map(item => {
-            if(item.id === selectedId){
-              return {...item,
-                id: selectedId,
-                rectData: newComment.rectData, 
-                tr_content: newComment.tr_content,
-                title :  `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
+              if(item.id === selectedId){
+                return {...item,
+                  id: selectedId,
+                  rectData: newComment.rectData, 
+                  tr_content: newComment.tr_content,
+                  title :  `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
+                }
               }
-            }
-            return item;
-          }),
+              return item;
+            }),
           newComment:{
             ...state.comment.newComment,
             tr_content: "",
             rectData: "",
             id:''
           },
-          onlyShowSelected: false,
+          // onlyShowSelected: false,
           defaultActiveTab: "2"
-        }};
+        },
+        isDrawing: {
+          ...state.isDrawing,
+          processing: 2
+        }
+      };
       }
       return {
         ...state,
@@ -207,7 +224,7 @@ export function reducer(state, action) {
               rectData: "",
               id:''
             },
-            onlyShowSelected: false,
+            // onlyShowSelected: false,
             defaultActiveTab: "2"
         },
         isDrawing: {
@@ -220,9 +237,21 @@ export function reducer(state, action) {
                 comment:{
                   ...state.comment,
                     list: state.comment.list.filter(item=> item.rectData.id !== action.value.id ),
-                    onlyShowSelected: false,
+                    onlyShowSelected: false
                   }
-                }
+                };
+      case COMIC_DESELECT:
+        return {
+          ...state,
+          comment: {
+            ...state.comment,
+            list: state.comment.list.map(item => {
+               item.selected = false;
+               return item;
+            }),
+            onlyShowSelected: false
+          }
+        }
       case COMIC_CHANGE_DISPLAY_IMAGE:
         return {
           ...state,

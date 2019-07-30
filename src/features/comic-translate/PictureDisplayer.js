@@ -62,7 +62,7 @@ export class PictureDisplayer extends React.PureComponent {
         const list = this.props.rectList;
         const onlyShowSelected = this.props.onlyShowSelected;
         list.forEach(item => {
-          if(item.rectData && (!onlyShowSelected || !item.hidden)){
+          if(item.rectData && (!onlyShowSelected || item.selected)){
             ShetchManager.draw(item.rectData);
           }
         });
