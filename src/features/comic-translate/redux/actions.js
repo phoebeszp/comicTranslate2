@@ -11,3 +11,4 @@ export {clickDrawPen,
     showSelectedRect,
     deSelectAll
 } from './changeScale';
+export {fetchData} from './fetchData';

@@ -15,8 +15,8 @@ import {
 // };
 
 export default {
-  path: '/',
-  name: 'ComicTranslate',
+  path: '/comicworkshop',
+  name: 'comicworkshop',
   component: DefaultPage,
   childRoutes: [
     { path: 'default-page',

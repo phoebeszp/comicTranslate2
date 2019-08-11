@@ -7,35 +7,37 @@ import { Button, Upload, Icon, Row, Col } from 'antd';
 
 export class DetailInfo extends Component {
   static propTypes = {
-    comicTranslate: PropTypes.object.isRequired,
+    comicTranslateDetailInfo: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
   };
-
+  componentDidMount() {
+    this.props.actions.fetchData();
+  }
   render() {
-    // const {bookNO, bookName, chapterNO, chapterNumber, resourceNo, progross} = this.props.comicTranslate;
-    const bookNO = '仙剑奇侠传';
+    const {booknum, bookname, chapternum, chaptername, resourcenum} = this.props.comicTranslateDetailInfo;
+    
     return (
       <div className="comic-translate-detail-info">
         <div className = 'resourceDetail'>
           <Row gutter={16}>
           <Col className="gutter-row" span={8}>
-            <div>Booke Number:{bookNO}</div>
+            <div>Booke Number:{booknum}</div>
           </Col>
           <Col className="gutter-row" span={8}>
-            <div >Booke Name:</div>
+            <div >Booke Name:{bookname}</div>
           </Col>
           </Row>
           <Row gutter={16}>
             <Col className="gutter-row" span={8}>
-              <div>Chapter Number:</div>
+              <div>Chapter Number:{chapternum}</div>
             </Col>
             <Col className="gutter-row" span={8}>
-              <div>Chapter Name:</div>
+              <div>Chapter Name:{chaptername}</div>
             </Col>
             </Row>
           <Row gutter={16}>
             <Col className="gutter-row" span={8}>
-              <div>Resource Number:</div>
+              <div>Resource Number:{resourcenum}</div>
             </Col>
             <Col className="gutter-row" span={8}>
               <div>Status:</div>
@@ -58,7 +60,7 @@ export class DetailInfo extends Component {
 /* istanbul ignore next */
 function mapStateToProps(state) {
   return {
-    comicTranslate: state.comicTranslate,
+    comicTranslateDetailInfo: state.comicTranslate.detailInfo,
   };
 }
 

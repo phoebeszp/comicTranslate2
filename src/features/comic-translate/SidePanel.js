@@ -36,7 +36,7 @@ export  class SidePanel extends Component {
       this.props.actions.removeComment(this.state.selectedItem.rectData);
       this.setState({visible: false, selectedItem: null});
     }else{
-      this.setState({visible: false});
+      this.setState({visible: true});
     }
   }
   selectItem(item){

@@ -8,8 +8,10 @@
 
 import initialState from './initialState';
 import {reducer as changeScale} from './changeScale';
+import {reducer as fetchData} from './fetchData'
 const reducers = [
-  changeScale
+  changeScale,
+  fetchData
 ];
 
 export default function reducer(state = initialState, action) {
