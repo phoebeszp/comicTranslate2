@@ -12,6 +12,7 @@ export  class SidePanel extends Component {
     comments: PropTypes.array.isRequired,
     // onlyShowSelected: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
+    newComment: PropTypes.object.newComment
   };
   
   state = { visible: false, selectedItem: null};
@@ -33,6 +34,7 @@ export  class SidePanel extends Component {
   }
   handleModal(confirmed){
     if(confirmed){
+      window.deleteResourceContent(this.state.selectedItem.id);
       this.props.actions.removeComment(this.state.selectedItem.rectData);
       this.setState({visible: false, selectedItem: null});
     }else{
@@ -43,12 +45,25 @@ export  class SidePanel extends Component {
     this.props.actions.showSelectedRect(item);
     this.setState({ selectedItem: item });
   }
-  
+
+  saveItem(){
+    const newComment = this.props.newComment;
+    console.log("newcomment++++" + JSON.stringify(newComment));
+    window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.rectData));
+    this.props.actions.saveComment();
+  }
+  componentDidMount() {
+    this.props.actions.fetchData({
+      "chapterid": window.chapterid,
+      "resourceid": window.resourceid
+    });
+  }
   render() {
     const { TabPane } = Tabs;
     const { TextArea } = Input;
     const {comments, tr_content, defaultActiveKey} = this.props;
     const ButtonGroup = Button.Group;
+    console.log("comments+++"+comments);
     return (
       <div className="comic-translate-side-panel">
         <Modal
@@ -70,7 +85,7 @@ export  class SidePanel extends Component {
               value={tr_content}
               onChange={this.changeComment.bind(this)}
               ></TextArea>
-                <Button size='small' type="primary" onClick={this.props.actions.saveComment}>Save</Button>
+                <Button size='small' type="primary" onClick={() => this.saveItem()}>Save</Button>
                 <Button size='small' onClick={this.props.actions.cancelComment}>Cancel</Button>
           </TabPane>
           <TabPane tab="List" key="2" >
@@ -103,6 +118,7 @@ function mapStateToProps(state) {
   return {
     defaultActiveKey: state.comicTranslate.comment.defaultActiveTab,
     tr_content: state.comicTranslate.comment.newComment.tr_content,
+    newComment: state.comicTranslate.comment.newComment,
     comments: state.comicTranslate.comment.list
   };
 }

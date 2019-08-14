@@ -23,7 +23,7 @@ const initialState = {
         translateY: 0
     },
     comment:{
-        list: [],
+        list: window.resourceContentList?window.resourceContentList:[],
         newComment: {
             tr_content: "",
             rectData:""

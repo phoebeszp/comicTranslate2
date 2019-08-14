@@ -9,6 +9,7 @@ import {
 // Rekit uses redux-thunk for async actions by default: https://github.com/gaearon/redux-thunk
 // If you prefer redux-saga, you can use rekit-plugin-redux-saga: https://github.com/supnate/rekit-plugin-redux-saga
 export function fetchData(args = {}) {
+  console.log(JSON.stringify(args));
   return dispatch => {
     // optionally you can have getState as the second argument
     dispatch({
@@ -23,14 +24,7 @@ export function fetchData(args = {}) {
       // doRequest is a placeholder Promise. You should replace it with your own logic.
       // See the real-word example at:  https://github.com/supnate/rekit/blob/master/src/features/home/redux/fetchRedditReactjsList.js
       // args.error here is only for test coverage purpose.
-      const axiosInstance = axios.create({
-        baseURL: 'http://ec2-3-18-113-108.us-east-2.compute.amazonaws.com:8080/comicworkshop/'
-      });
-      const params = {
-        "chapterid":"8ebb6aed-e8d8-4602-8ac4-afd86b87a07e",
-        "resourceid":"3dcca1f6-c5c9-49c7-975b-391d411995ca"
-      };
-      const doRequest = axiosInstance.post('staffwork/getBookAndResourceInfo',params);
+      const doRequest = axios.post('/comicworkshop/staffwork/getResourceContentInfo',args);
 
       doRequest.then(
         res => {
@@ -75,9 +69,13 @@ export function reducer(state, action) {
 
     case COMIC_FETCH_DATA_SUCCESS:
       // The request is success
+      console.log("list+++++"+action.data);
       return {
         ...state,
-        detailInfo: action.data.data.data1,
+        comment: {
+          ...state.comment,
+          list: action.data.data
+        }
         // fetchRedditListPending: false,
         // fetchRedditListError: null,
       };

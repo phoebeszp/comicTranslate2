@@ -63,7 +63,7 @@ export class PictureDisplayer extends React.PureComponent {
         const onlyShowSelected = this.props.onlyShowSelected;
         list.forEach(item => {
           if(item.rectData && (!onlyShowSelected || item.selected)){
-            ShetchManager.draw(item.rectData);
+            ShetchManager.draw(JSON.parse(item.recdata));
           }
         });
       }
@@ -79,11 +79,25 @@ export class PictureDisplayer extends React.PureComponent {
   }
   componentWillMount(){
     let that = this;
-    ImageLoader.init((param)=>{
-      let imageResource = param;
-      that.props.actions.changeDisplayImage({pic:imageResource[0]});
-    });
+    const pic = window.pic;
+    const picPath = {
+      pic:{
+        width: pic.width,
+        height:pic.height,
+        url: pic.url,
+        path: `url('${pic.url}')`
+      }
+    };
+    console.log("pic params" + JSON.stringify(picPath));
+    that.props.actions.changeDisplayImage(picPath);
   }
+  // componentWillMount(){
+  //   let that = this;
+  //   ImageLoader.init((param)=>{
+  //     let imageResource = param;
+  //     that.props.actions.changeDisplayImage({pic:imageResource[0]});
+  //   });
+  // }
   render() {
     const scaleInt = this.props.scaleInt;
     const {height, width, path} = this.props.imageInfo;

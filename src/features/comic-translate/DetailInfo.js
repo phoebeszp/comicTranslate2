@@ -10,9 +10,7 @@ export class DetailInfo extends Component {
     comicTranslateDetailInfo: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
   };
-  componentDidMount() {
-    this.props.actions.fetchData();
-  }
+  
   render() {
     const {booknum, bookname, chapternum, chaptername, resourcenum} = this.props.comicTranslateDetailInfo;
     

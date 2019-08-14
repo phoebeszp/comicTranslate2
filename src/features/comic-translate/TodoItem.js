@@ -9,11 +9,11 @@ export default class TodoItem extends Component {
     super(props);
   }
   render () {
-    const {id, title, tr_content, selected} = this.props.item;
+    const {id, updatedTime, tr_content, selected} = this.props.item;
     return (
       <div className="item-container" onClick={this.props.selectItem} style={{cursor: 'pointer', 
       backgroundColor: selected?'#e1e1ff':''}}>
-        <Text>{title}</Text>
+        <Text>{updatedTime}</Text>
         <p>{tr_content}</p>
       </div>
     )
