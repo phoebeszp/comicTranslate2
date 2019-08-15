@@ -60,17 +60,36 @@ export  class SidePanel extends Component {
 
   saveItem(){
     const newComment = this.props.newComment;
+    let promise = new Promise();
     if(newComment.id){ //edit
       console.log("edit item, id="+newComment.id);
-      window.editResourceContent(newComment.id, newComment.tr_content);
+      // window.editResourceContent(newComment.id, newComment.tr_content);
+      promise = this.props.actions.updateItem({
+            "id": newComment.id,
+            "tasktype": window.tasktype,
+            "content": newComment.tr_content,
+      });
     }else {
-      window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.recdata));
+      promise = this.props.actions.saveComment({
+        "id": newComment.id,
+        "tasktype": window.tasktype,
+        "content": newComment.tr_content,
+        "chapterid":window.chapterid,
+        "resourceid":window.resourceid,
+        "recdata":JSON.stringify(newComment.recdata),
+      });
+      //window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.recdata));
     }
-    this.props.actions.fetchData({
-      "chapterid": window.chapterid,
-      "resourceid": window.resourceid
+    promise.then((resolve, reject)=>{
+      return new Promise((resolve, reject)=>{
+          this.props.actions.fetchData({
+          "chapterid": window.chapterid,
+          "resourceid": window.resourceid
+        }).then(resolve, reject);
+      })
+    }).then(()=>{
+      this.props.actions.saveComment();
     });
-    this.props.actions.saveComment();
   }
   
   render() {
