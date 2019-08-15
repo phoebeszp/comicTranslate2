@@ -150,7 +150,7 @@ export function reducer(state, action) {
 
     case COMIC_FETCH_DATA_SUCCESS:
       // The request is success
-      console.log("backend returned list"+ JSON.stringify(action.data));
+      // console.log("backend returned list"+ JSON.stringify(action.data));
       return {
         ...state,
         comment: {

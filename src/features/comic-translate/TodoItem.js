@@ -5,9 +5,6 @@ import './TodoItem.less'
 const { Text } = Typography;
 
 export default class TodoItem extends Component {
-  constructor(props) {
-    super(props);
-  }
   render () {
     const {updatetime, tr_content, selected} = this.props.item;
     return (

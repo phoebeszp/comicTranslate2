@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Button, Input, Tabs,Modal } from 'antd';
+import { List, Button, Input, Tabs,Modal, message } from 'antd';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -34,20 +34,17 @@ export  class SidePanel extends Component {
   }
   handleModal(confirmed){
     if(confirmed){
-      console.log("remove item, id="+this.state.selectedItem.id);
       this.props.actions.deleteItem({
         "id":this.state.selectedItem.id,
         "tasktype":window.tasktype
       }).then(()=>{
-        return new Promise((resolve, reject)=>{
-          return this.props.actions.fetchData({
-            "chapterid": window.chapterid,
-            "resourceid": window.resourceid
-          }).then(resolve, reject);
-        });
-      }).then(()=>{
+        message.success('Save successfully!');
         this.props.actions.removeComment(this.state.selectedItem.recdata);
         this.setState({visible: false, selectedItem: null});
+        this.props.actions.fetchData({
+            "chapterid": window.chapterid,
+            "resourceid": window.resourceid
+        });
       });
     }else{
       this.setState({visible: false});
@@ -59,40 +56,40 @@ export  class SidePanel extends Component {
   }
 
   saveItem(){
+    const that = this;
+    function refresh(){
+      message.success('Save successfully!');
+      that.props.actions.saveComment();
+      that.props.actions.fetchData({
+            "chapterid": window.chapterid,
+            "resourceid": window.resourceid
+        });
+    }
     const newComment = this.props.newComment;
-    let promise = new Promise();
     if(newComment.id){ //edit
       console.log("edit item, id="+newComment.id);
-      // window.editResourceContent(newComment.id, newComment.tr_content);
-      promise = this.props.actions.updateItem({
+      this.props.actions.updateItem({
             "id": newComment.id,
             "tasktype": window.tasktype,
             "content": newComment.tr_content,
-      });
+      }).then(refresh);
     }else {
-      promise = this.props.actions.saveComment({
-        "id": newComment.id,
+      this.props.actions.saveItem({
         "tasktype": window.tasktype,
         "content": newComment.tr_content,
-        "chapterid":window.chapterid,
-        "resourceid":window.resourceid,
+        "chapterid": window.chapterid,
+        "resourceid": window.resourceid,
         "recdata":JSON.stringify(newComment.recdata),
-      });
-      //window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.recdata));
+      }).then(refresh);
     }
-    promise.then((resolve, reject)=>{
-      return new Promise((resolve, reject)=>{
-          this.props.actions.fetchData({
-          "chapterid": window.chapterid,
-          "resourceid": window.resourceid
-        }).then(resolve, reject);
-      })
-    }).then(()=>{
-      this.props.actions.saveComment();
-    });
   }
   
   render() {
+    message.config({
+      top: 80,
+      duration: 2,
+      maxCount: 3,
+    });
     const { TabPane } = Tabs;
     const { TextArea } = Input;
     const {comments, tr_content, defaultActiveKey} = this.props;
@@ -101,6 +98,16 @@ export  class SidePanel extends Component {
       <div className="comic-translate-side-panel">
         <Modal
           title="Warning"
+          visible={this.state.visible}
+          onOk={()=>this.handleModal(true)}
+          onCancel={()=>this.handleModal(false)}
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <p>Are you sure remove this item?</p>
+        </Modal>
+        <Modal
+          title="Info"
           visible={this.state.visible}
           onOk={()=>this.handleModal(true)}
           onCancel={()=>this.handleModal(false)}

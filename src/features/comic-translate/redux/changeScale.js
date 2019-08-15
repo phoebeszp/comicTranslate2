@@ -175,56 +175,17 @@ export function reducer(state, action) {
         };
      
     case COMIC_SAVE_COMMENT:
-      const newDate = new Date();
-      const newComment = state.comment.newComment;
-      const selectedId = newComment.id;
-      if(selectedId){ //edit
-        return {...state, 
-          comment:{
-          ...state.comment,
-          // list: state.comment.list.map(item => {
-          //     if(item.id === selectedId){
-          //       return {...item,
-          //         id: selectedId,
-          //         recdata: newComment.recdata, 
-          //         tr_content: newComment.tr_content,
-          //         title :  `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
-          //       }
-          //     }
-          //     return item;
-          //   }),
-          newComment:{
-            ...state.comment.newComment,
-            tr_content: "",
-            recdata: "",
-            id:''
-          },
-          // onlyShowSelected: false,
-          defaultActiveTab: "2"
-        },
-        isDrawing: {
-          ...state.isDrawing,
-          processing: 2
-        }
-      };
-      }
       return {
         ...state,
         comment:{
           ...state.comment,
-            // list:[...state.comment.list, {
-            //   id: newComment.recdata.id,
-            //   recdata: newComment.recdata, 
-            //   tr_content: newComment.tr_content,
-            //   title: `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
-            // }],
+            onlyShowSelected: false,
             newComment:{
               ...state.comment.newComment,
               tr_content: "",
               recdata: "",
               id:''
             },
-            // onlyShowSelected: false,
             defaultActiveTab: "2"
         },
         isDrawing: {
@@ -236,7 +197,6 @@ export function reducer(state, action) {
         return {...state, 
                 comment:{
                   ...state.comment,
-                    // list: state.comment.list.filter(item=> item.recdata.id !== action.value.id ),
                     onlyShowSelected: false
                   }
                 };
