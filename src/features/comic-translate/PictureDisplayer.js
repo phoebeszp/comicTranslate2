@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
-import ImageLoader from './manager/ImageLoader';
 import ShetchManager from './manager/ShetchManager';
 import DragManager from './manager/DragManager';
 import { findDOMNode } from 'react-dom'
@@ -24,22 +23,6 @@ export class PictureDisplayer extends React.PureComponent {
       if(scaleInt !== 1){
           newX = translateX + deltaX ;
           newY = translateY + deltaY;
-          // const maxTop = scaleInt*screenHeight;
-          // if(translateY > maxTop){
-          //     translateY = maxTop;
-          // } else if (translateY< -1*maxTop){
-          //     translateY = -1*maxTop;
-          // }
-          // if(actualWidth*scaleInt > screenWidth){
-          //     const maxLeft = (actualWidth*scaleInt - screenWidth)/scaleInt;
-          //     if(translateX > maxLeft){
-          //         translateX = maxLeft;
-          //     }else if(translateX < -1*maxLeft){
-          //         translateX = -1*maxLeft;
-          //     }
-          // } else {
-          //     newY = 0;
-          // }
       }
       return {translateX: newX,translateY: newY};
   } 
@@ -56,13 +39,14 @@ export class PictureDisplayer extends React.PureComponent {
       return this.props;
   }
   componentDidUpdate() {
-      //let rectData = {"id":"a16165f9-fa24-41e2-91a4-a1f2b82efa82","tool":"rectangle","color":"#ff8040","size":5,"fill":"","start":{"x":60.763885498046875,"y":47},"end":{"x":196.76388549804688,"y":207}};
+      //let recdata = {"id":"a16165f9-fa24-41e2-91a4-a1f2b82efa82","tool":"rectangle","color":"#ff8040","size":5,"fill":"","start":{"x":60.763885498046875,"y":47},"end":{"x":196.76388549804688,"y":207}};
       if(this.props.isDrawing.processing !== 1){
         ShetchManager.clearRect();
         const list = this.props.rectList;
         const onlyShowSelected = this.props.onlyShowSelected;
         list.forEach(item => {
-          if(item.rectData && (!onlyShowSelected || item.selected)){
+          if(item.recdata && (!onlyShowSelected || item.selected)){
+            console.log("componentDidUpdate+++"+item.recdata)
             ShetchManager.draw(JSON.parse(item.recdata));
           }
         });
@@ -73,9 +57,13 @@ export class PictureDisplayer extends React.PureComponent {
   componentDidMount() {
     DragManager.register(this.refs["container"], this.onComponentDragMove.bind(this), this.returnDrawingStatus.bind(this));
     ShetchManager.register(findDOMNode(this.refs["canvas"]), this.returnDrawingStatus.bind(this), this._callbackOfFinishDrawing.bind(this));
+    this.props.actions.fetchData({
+      "chapterid": window.chapterid,
+      "resourceid": window.resourceid
+    });
   }
-  _callbackOfFinishDrawing(rectData) {
-    this.props.actions.addComments(rectData);
+  _callbackOfFinishDrawing(recdata) {
+    this.props.actions.addComments(recdata);
   }
   componentWillMount(){
     let that = this;
@@ -88,7 +76,6 @@ export class PictureDisplayer extends React.PureComponent {
         path: `url('${pic.url}')`
       }
     };
-    console.log("pic params" + JSON.stringify(picPath));
     that.props.actions.changeDisplayImage(picPath);
   }
   // componentWillMount(){

@@ -9,7 +9,6 @@ import {
 // Rekit uses redux-thunk for async actions by default: https://github.com/gaearon/redux-thunk
 // If you prefer redux-saga, you can use rekit-plugin-redux-saga: https://github.com/supnate/rekit-plugin-redux-saga
 export function fetchData(args = {}) {
-  console.log(JSON.stringify(args));
   return dispatch => {
     // optionally you can have getState as the second argument
     dispatch({
@@ -25,7 +24,6 @@ export function fetchData(args = {}) {
       // See the real-word example at:  https://github.com/supnate/rekit/blob/master/src/features/home/redux/fetchRedditReactjsList.js
       // args.error here is only for test coverage purpose.
       const doRequest = axios.post('/comicworkshop/staffwork/getResourceContentInfo',args);
-
       doRequest.then(
         res => {
           dispatch({
@@ -69,7 +67,7 @@ export function reducer(state, action) {
 
     case COMIC_FETCH_DATA_SUCCESS:
       // The request is success
-      console.log("list+++++"+action.data);
+      console.log("backend returned list"+ JSON.stringify(action.data));
       return {
         ...state,
         comment: {

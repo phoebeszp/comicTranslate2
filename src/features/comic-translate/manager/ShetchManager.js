@@ -77,8 +77,8 @@ export default class ShetchManager {
         domRef.addEventListener("mousemove", onMouseMove, false);
         domRef.addEventListener("mouseout", onMouseUp, false);
     }
-    static draw(rectData){
-        tool.draw(rectData);
+    static draw(recdata){
+        tool.draw(recdata);
     }
     static clearRect(){
         tool.clear();

@@ -186,7 +186,7 @@ export function reducer(state, action) {
               if(item.id === selectedId){
                 return {...item,
                   id: selectedId,
-                  rectData: newComment.rectData, 
+                  recdata: newComment.recdata, 
                   tr_content: newComment.tr_content,
                   title :  `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
                 }
@@ -196,7 +196,7 @@ export function reducer(state, action) {
           newComment:{
             ...state.comment.newComment,
             tr_content: "",
-            rectData: "",
+            recdata: "",
             id:''
           },
           // onlyShowSelected: false,
@@ -213,15 +213,15 @@ export function reducer(state, action) {
         comment:{
           ...state.comment,
             list:[...state.comment.list, {
-              id: newComment.rectData.id,
-              rectData: newComment.rectData, 
+              id: newComment.recdata.id,
+              recdata: newComment.recdata, 
               tr_content: newComment.tr_content,
               title: `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
             }],
             newComment:{
               ...state.comment.newComment,
               tr_content: "",
-              rectData: "",
+              recdata: "",
               id:''
             },
             // onlyShowSelected: false,
@@ -236,7 +236,7 @@ export function reducer(state, action) {
         return {...state, 
                 comment:{
                   ...state.comment,
-                    list: state.comment.list.filter(item=> item.rectData.id !== action.value.id ),
+                    list: state.comment.list.filter(item=> item.recdata.id !== action.value.id ),
                     onlyShowSelected: false
                   }
                 };
@@ -270,7 +270,7 @@ export function reducer(state, action) {
               ...state.comment,
               newComment:{
                 ...state.comment.newComment,
-                rectData: action.value[0],
+                recdata: action.value[0],
               },
               defaultActiveTab: "1"
             },

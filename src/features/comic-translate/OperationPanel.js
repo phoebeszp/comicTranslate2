@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
-import { Collapse, Button, Icon, Row, Col } from 'antd';
+import { Button, Icon, Row, Col } from 'antd';
 
 const SCALE_REATES=[10, 25, 50, 75, 100];
 const COLORS =['#ffffff', '#000000','#0000ff', '#00ff00', '#ff0000']
@@ -16,14 +16,11 @@ export class OperationPanel extends Component {
   };
 
   render() {
-    const Panel = Collapse.Panel;
     let scaleInt = this.props.scaleInt;
     let isDrawing = this.props.isDrawing.processing < 1;
     let disableBtn = this.props.isDrawing.processing === 1;
     return (
       <div className="comic-translate-operation-panel">
-        <Collapse defaultActiveKey={['1']} title='收起'>
-          <Panel key="1">
             <Row gutter={16}>
               <Col span={8}>
                 {
@@ -51,8 +48,6 @@ export class OperationPanel extends Component {
                 }
               </Col>
             </Row>
-          </Panel>
-        </Collapse>
       </div>
     );
   }

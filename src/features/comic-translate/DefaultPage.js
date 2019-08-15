@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
-import {SidePanel, DetailInfo, OperationPanel, PictureDisplayer} from './';
+import {SidePanel, OperationPanel, PictureDisplayer} from './';
 import 'antd/dist/antd.css'; 
 
 export class DefaultPage extends Component {
@@ -15,7 +15,7 @@ export class DefaultPage extends Component {
   render() {
     return (
       <div className="comic-translate-default-page">
-        <div className='headerInfo'><DetailInfo/><OperationPanel/></div>
+        <div className='headerInfo'><OperationPanel/></div>
         <div className='contentInfo'><PictureDisplayer/><SidePanel/></div>
       </div>
     );

@@ -26,7 +26,7 @@ const initialState = {
         list: window.resourceContentList?window.resourceContentList:[],
         newComment: {
             tr_content: "",
-            rectData:""
+            recdata:""
         },
         onlyShowSelected: false,
         defaultActiveTab: "2"

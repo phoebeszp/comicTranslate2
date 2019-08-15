@@ -12,7 +12,7 @@ export  class SidePanel extends Component {
     comments: PropTypes.array.isRequired,
     // onlyShowSelected: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
-    newComment: PropTypes.object.newComment
+    newComment: PropTypes.object.isRequired
   };
   
   state = { visible: false, selectedItem: null};
@@ -35,7 +35,7 @@ export  class SidePanel extends Component {
   handleModal(confirmed){
     if(confirmed){
       window.deleteResourceContent(this.state.selectedItem.id);
-      this.props.actions.removeComment(this.state.selectedItem.rectData);
+      this.props.actions.removeComment(this.state.selectedItem.recdata);
       this.setState({visible: false, selectedItem: null});
     }else{
       this.setState({visible: true});
@@ -48,22 +48,15 @@ export  class SidePanel extends Component {
 
   saveItem(){
     const newComment = this.props.newComment;
-    console.log("newcomment++++" + JSON.stringify(newComment));
-    window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.rectData));
+    //window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.recdata));
     this.props.actions.saveComment();
   }
-  componentDidMount() {
-    this.props.actions.fetchData({
-      "chapterid": window.chapterid,
-      "resourceid": window.resourceid
-    });
-  }
+  
   render() {
     const { TabPane } = Tabs;
     const { TextArea } = Input;
     const {comments, tr_content, defaultActiveKey} = this.props;
     const ButtonGroup = Button.Group;
-    console.log("comments+++"+comments);
     return (
       <div className="comic-translate-side-panel">
         <Modal
