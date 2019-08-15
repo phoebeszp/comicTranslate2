@@ -11,4 +11,4 @@ export {clickDrawPen,
     showSelectedRect,
     deSelectAll
 } from './changeScale';
-export {fetchData} from './fetchData';
+export {fetchData, deleteItem, updateItem, saveItem} from './fetchData';

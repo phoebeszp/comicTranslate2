@@ -46,8 +46,11 @@ export class PictureDisplayer extends React.PureComponent {
         const onlyShowSelected = this.props.onlyShowSelected;
         list.forEach(item => {
           if(item.recdata && (!onlyShowSelected || item.selected)){
-            console.log("componentDidUpdate+++"+item.recdata)
-            ShetchManager.draw(JSON.parse(item.recdata));
+            let recdata = item.recdata;
+            if(typeof recdata === 'string'){
+              recdata = JSON.parse(recdata);
+            }
+            ShetchManager.draw(recdata);
           }
         });
       }

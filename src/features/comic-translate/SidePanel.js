@@ -34,11 +34,23 @@ export  class SidePanel extends Component {
   }
   handleModal(confirmed){
     if(confirmed){
-      window.deleteResourceContent(this.state.selectedItem.id);
-      this.props.actions.removeComment(this.state.selectedItem.recdata);
-      this.setState({visible: false, selectedItem: null});
+      console.log("remove item, id="+this.state.selectedItem.id);
+      this.props.actions.deleteItem({
+        "id":this.state.selectedItem.id,
+        "tasktype":window.tasktype
+      }).then(()=>{
+        return new Promise((resolve, reject)=>{
+          return this.props.actions.fetchData({
+            "chapterid": window.chapterid,
+            "resourceid": window.resourceid
+          }).then(resolve, reject);
+        });
+      }).then(()=>{
+        this.props.actions.removeComment(this.state.selectedItem.recdata);
+        this.setState({visible: false, selectedItem: null});
+      });
     }else{
-      this.setState({visible: true});
+      this.setState({visible: false});
     }
   }
   selectItem(item){
@@ -48,7 +60,16 @@ export  class SidePanel extends Component {
 
   saveItem(){
     const newComment = this.props.newComment;
-    //window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.recdata));
+    if(newComment.id){ //edit
+      console.log("edit item, id="+newComment.id);
+      window.editResourceContent(newComment.id, newComment.tr_content);
+    }else {
+      window.saveResourceContent(newComment.tr_content, JSON.stringify(newComment.recdata));
+    }
+    this.props.actions.fetchData({
+      "chapterid": window.chapterid,
+      "resourceid": window.resourceid
+    });
     this.props.actions.saveComment();
   }
   
@@ -86,7 +107,7 @@ export  class SidePanel extends Component {
             <ButtonGroup>
               <Button icon='edit' onClick={() => this.editComment()} disabled={!this.state.selectedItem} >Edit</Button>
               <Button icon="delete" onClick={() => this.removeComment()} disabled={!this.state.selectedItem}>Delete</Button>
-              <Button icon='select' onClick={() => this.deselectComment()} disabled={!this.state.selectedItem}>Deselect</Button>
+              <Button icon='select' onClick={() => this.deselectComment()} disabled={!this.state.selectedItem}>Show All</Button>
             </ButtonGroup>
             </div>
             <List

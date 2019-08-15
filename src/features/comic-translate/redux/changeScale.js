@@ -182,17 +182,17 @@ export function reducer(state, action) {
         return {...state, 
           comment:{
           ...state.comment,
-          list: state.comment.list.map(item => {
-              if(item.id === selectedId){
-                return {...item,
-                  id: selectedId,
-                  recdata: newComment.recdata, 
-                  tr_content: newComment.tr_content,
-                  title :  `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
-                }
-              }
-              return item;
-            }),
+          // list: state.comment.list.map(item => {
+          //     if(item.id === selectedId){
+          //       return {...item,
+          //         id: selectedId,
+          //         recdata: newComment.recdata, 
+          //         tr_content: newComment.tr_content,
+          //         title :  `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
+          //       }
+          //     }
+          //     return item;
+          //   }),
           newComment:{
             ...state.comment.newComment,
             tr_content: "",
@@ -212,12 +212,12 @@ export function reducer(state, action) {
         ...state,
         comment:{
           ...state.comment,
-            list:[...state.comment.list, {
-              id: newComment.recdata.id,
-              recdata: newComment.recdata, 
-              tr_content: newComment.tr_content,
-              title: `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
-            }],
+            // list:[...state.comment.list, {
+            //   id: newComment.recdata.id,
+            //   recdata: newComment.recdata, 
+            //   tr_content: newComment.tr_content,
+            //   title: `${newDate.getMonth()}-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}`
+            // }],
             newComment:{
               ...state.comment.newComment,
               tr_content: "",
@@ -236,7 +236,7 @@ export function reducer(state, action) {
         return {...state, 
                 comment:{
                   ...state.comment,
-                    list: state.comment.list.filter(item=> item.recdata.id !== action.value.id ),
+                    // list: state.comment.list.filter(item=> item.recdata.id !== action.value.id ),
                     onlyShowSelected: false
                   }
                 };

@@ -4,6 +4,7 @@ import {
   COMIC_FETCH_DATA_SUCCESS,
   COMIC_FETCH_DATA_FAILURE,
   COMIC_FETCH_DATA_ERROR,
+  COMIC_OTHER_SUCCESS,
 } from './constants';
 
 // Rekit uses redux-thunk for async actions by default: https://github.com/gaearon/redux-thunk
@@ -43,6 +44,88 @@ export function fetchData(args = {}) {
       );
     });
 
+    return promise;
+  };
+}
+
+export function updateItem(args = {}){
+  return dispatch => {
+    dispatch({
+      type: COMIC_FETCH_DATA_BEGIN,
+    });
+    const promise = new Promise((resolve, reject) => {
+      const doRequest = axios.post('/comicworkshop/staffwork/editResourceContent',args);
+      doRequest.then(
+        res => {
+          dispatch({
+            type: COMIC_OTHER_SUCCESS,
+            data: res.data,
+          });
+          resolve(res);
+        },
+        err => {
+          dispatch({
+            type: COMIC_FETCH_DATA_FAILURE,
+            data: { error: err },
+          });
+          reject(err);
+        }
+      );
+    });
+    return promise;
+  };
+}
+export function saveItem(args = {}){
+  return dispatch => {
+    dispatch({
+      type: COMIC_FETCH_DATA_BEGIN,
+    });
+    const promise = new Promise((resolve, reject) => {
+      const doRequest = axios.post('/comicworkshop/staffwork/saveResourceContent',args);
+      doRequest.then(
+        res => {
+          dispatch({
+            type: COMIC_OTHER_SUCCESS,
+            data: res.data,
+          });
+          resolve(res);
+        },
+        err => {
+          dispatch({
+            type: COMIC_FETCH_DATA_FAILURE,
+            data: { error: err },
+          });
+          reject(err);
+        }
+      );
+    });
+    return promise;
+  };
+}
+export function deleteItem(args = {}){
+  return dispatch => {
+    dispatch({
+      type: COMIC_FETCH_DATA_BEGIN,
+    });
+    const promise = new Promise((resolve, reject) => {
+      const doRequest = axios.post('/comicworkshop/staffwork/deleteResourceContent',args);
+      doRequest.then(
+        res => {
+          dispatch({
+            type: COMIC_OTHER_SUCCESS,
+            data: res.data,
+          });
+          resolve(res);
+        },
+        err => {
+          dispatch({
+            type: COMIC_FETCH_DATA_FAILURE,
+            data: { error: err },
+          });
+          reject(err);
+        }
+      );
+    });
     return promise;
   };
 }
