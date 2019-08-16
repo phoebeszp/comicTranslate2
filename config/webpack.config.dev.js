@@ -85,7 +85,8 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+      '@ant-design/icons/lib/dist$': path.resolve(__dirname, "../src/icons.js"),
+      '@': path.resolve(__dirname, '../src'),
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
