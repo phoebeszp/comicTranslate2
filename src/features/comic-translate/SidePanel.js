@@ -12,7 +12,9 @@ export  class SidePanel extends Component {
     comments: PropTypes.array.isRequired,
     // onlyShowSelected: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
-    newComment: PropTypes.object.isRequired
+    newComment: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    previlege: PropTypes.object.isRequired
   };
   
   state = { visible: false, selectedItem: null};
@@ -36,14 +38,14 @@ export  class SidePanel extends Component {
     if(confirmed){
       this.props.actions.deleteItem({
         "id":this.state.selectedItem.id,
-        "tasktype":window.tasktype
+        "tasktype":this.props.params.tasktype
       }).then(()=>{
         message.success('Save successfully!');
         this.props.actions.removeComment(this.state.selectedItem.recdata);
         this.setState({visible: false, selectedItem: null});
         this.props.actions.fetchData({
-            "chapterid": window.chapterid,
-            "resourceid": window.resourceid
+            "chapterid": this.props.params.chapterid,
+            "resourceid": this.props.params.resourceid
         });
       });
     }else{
@@ -61,8 +63,8 @@ export  class SidePanel extends Component {
       message.success('Save successfully!');
       that.props.actions.saveComment();
       that.props.actions.fetchData({
-            "chapterid": window.chapterid,
-            "resourceid": window.resourceid
+            "chapterid": that.props.params.chapterid,
+            "resourceid": that.props.params.resourceid
         });
     }
     const newComment = this.props.newComment;
@@ -70,15 +72,15 @@ export  class SidePanel extends Component {
       console.log("edit item, id="+newComment.id);
       this.props.actions.updateItem({
             "id": newComment.id,
-            "tasktype": window.tasktype,
+            "tasktype": this.props.params.tasktype,
             "content": newComment.tr_content,
       }).then(refresh);
     }else {
       this.props.actions.saveItem({
-        "tasktype": window.tasktype,
+        "tasktype": this.props.params.tasktype,
         "content": newComment.tr_content,
-        "chapterid": window.chapterid,
-        "resourceid": window.resourceid,
+        "chapterid": this.props.params.chapterid,
+        "resourceid": this.props.params.resourceid,
         "recdata":JSON.stringify(newComment.recdata),
       }).then(refresh);
     }
@@ -131,8 +133,12 @@ export  class SidePanel extends Component {
           <TabPane tab="List" key="2" >
             <div>
             <ButtonGroup>
-              <Button icon='edit' onClick={() => this.editComment()} disabled={!this.state.selectedItem} >Edit</Button>
-              <Button icon="delete" onClick={() => this.removeComment()} disabled={!this.state.selectedItem}>Delete</Button>
+              {this.props.previlege.editable && (
+              <Button icon='edit' onClick={() => this.editComment()} disabled={!this.state.selectedItem} 
+              >Edit</Button>)}
+              {this.props.previlege.editable && (
+              <Button icon="delete" onClick={() => this.removeComment()} 
+              disabled={!this.state.selectedItem}>Delete</Button>)}
               <Button icon='select' onClick={() => this.deselectComment()} disabled={!this.state.selectedItem}>Show All</Button>
             </ButtonGroup>
             </div>
@@ -159,7 +165,9 @@ function mapStateToProps(state) {
     defaultActiveKey: state.comicTranslate.comment.defaultActiveTab,
     tr_content: state.comicTranslate.comment.newComment.tr_content,
     newComment: state.comicTranslate.comment.newComment,
-    comments: state.comicTranslate.comment.list
+    comments: state.comicTranslate.comment.list,
+    params: state.comicTranslate.params,
+    previlege: state.comicTranslate.previlege
   };
 }
 

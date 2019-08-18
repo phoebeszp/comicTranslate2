@@ -13,6 +13,7 @@ export class OperationPanel extends Component {
     color: PropTypes.string.isRequired,
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    previlege: PropTypes.object.isRequired
   };
 
   render() {
@@ -30,8 +31,9 @@ export class OperationPanel extends Component {
                   )
                 }
               </Col>
-              <Col span={8}>
-                <Button type={isDrawing?'primary':''} 
+              {this.props.previlege.editable && (
+              <Col span={8} >
+                <Button type={isDrawing?'primary':''} style={{backgroundColor: (!isDrawing&&this.props.color === '#ffffff')&&'#333'}}
                 onClick={this.props.actions.clickDrawPen} 
                 disabled = {disableBtn}
                 size='small'>
@@ -46,7 +48,7 @@ export class OperationPanel extends Component {
                    ></Button>
                   )
                 }
-              </Col>
+              </Col>)}
             </Row>
       </div>
     );
@@ -58,7 +60,8 @@ function mapStateToProps(state) {
   return {
     scaleInt: state.comicTranslate.scaleInt,
     color: state.comicTranslate.color,
-    isDrawing: state.comicTranslate.isDrawing
+    isDrawing: state.comicTranslate.isDrawing,
+    previlege: state.comicTranslate.previlege
   };
 }
 

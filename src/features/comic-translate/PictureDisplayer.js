@@ -15,7 +15,8 @@ export class PictureDisplayer extends React.PureComponent {
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     rectList: PropTypes.array.isRequired,
-    onlyShowSelected: PropTypes.bool.isRequired
+    onlyShowSelected: PropTypes.bool.isRequired,
+    params: PropTypes.object.isRequired
   };
   calculatePosition(deltaX, deltaY, screenHeight,screenWidth, translateX, translateY) {
     let newX = translateX, newY = translateY;
@@ -61,8 +62,8 @@ export class PictureDisplayer extends React.PureComponent {
     DragManager.register(this.refs["container"], this.onComponentDragMove.bind(this), this.returnDrawingStatus.bind(this));
     ShetchManager.register(findDOMNode(this.refs["canvas"]), this.returnDrawingStatus.bind(this), this._callbackOfFinishDrawing.bind(this));
     this.props.actions.fetchData({
-      "chapterid": window.chapterid,
-      "resourceid": window.resourceid
+      "chapterid": this.props.params.chapterid,
+      "resourceid": this.props.params.resourceid
     });
   }
   _callbackOfFinishDrawing(recdata) {
@@ -70,7 +71,7 @@ export class PictureDisplayer extends React.PureComponent {
   }
   componentWillMount(){
     let that = this;
-    const pic = window.pic;
+    const pic = this.props.params.pic;
     const picPath = {
       pic:{
         width: pic.width,
@@ -116,7 +117,8 @@ function mapStateToProps(state) {
     color: state.comicTranslate.color,
     isDrawing: state.comicTranslate.isDrawing,
     rectList : state.comicTranslate.comment.list,
-    onlyShowSelected : state.comicTranslate.comment.onlyShowSelected
+    onlyShowSelected : state.comicTranslate.comment.onlyShowSelected,
+    params: state.comicTranslate.params
   };
 }
 

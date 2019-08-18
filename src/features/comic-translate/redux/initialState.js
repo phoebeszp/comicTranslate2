@@ -30,6 +30,16 @@ const initialState = {
         },
         onlyShowSelected: false,
         defaultActiveTab: "2"
+    },
+    params:{
+        chapterid: window.chapterid,
+        resourceid: window.resourceid,
+        tasktype: window.tasktype,
+        pic: window.pic
+    },
+    previlege:{
+        editable: window.tasktype=='1' || window.tasktype =='3',
+        showTr_content: window.tasktype=='1' || window.tasktype =='2'
     }
 };
 
