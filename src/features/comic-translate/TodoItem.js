@@ -10,14 +10,25 @@ export class TodoItem extends Component {
   static propTypes = {
     previlege: PropTypes.object.isRequired
   };
+  getLineFeed (str){
+		if(typeof str  === 'string' ){
+		  let strs = str.replace(/\&nbsp\;/g, ' ').split('<br/>');
+			return strs;
+		}else{
+			return [str];
+		}
+	}
   render () {
     const {updatetime, tr_content, selected, ed_content} = this.props.item;
-    const showContent = this.props.previlege.showTr_content ? tr_content:ed_content;
+    let showContent = this.props.previlege.showTr_content ? tr_content:ed_content;
+    showContent = this.getLineFeed(showContent); 
     return (
       <div className="item-container" onClick={this.props.selectItem} style={{cursor: 'pointer', 
       backgroundColor: selected?'#e1e1ff':''}}>
         <Text>{updatetime}</Text>
-        <p>{showContent}</p>
+        {showContent.map(ele=>
+          <p>{ele}</p>
+        )}
       </div>
     )
   }

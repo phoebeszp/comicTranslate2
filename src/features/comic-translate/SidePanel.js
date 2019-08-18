@@ -18,7 +18,23 @@ export  class SidePanel extends Component {
   };
   
   state = { visible: false, selectedItem: null};
-  
+	setLineFeed (str){
+		if(typeof str  === 'string' ){
+		  let str1 = str.replace(/\r{0,}\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+			return str1;
+		}else{
+			return '';
+		}
+  }
+  getLineFeed (str){
+		if(typeof str  === 'string' ){
+		let str1 = str.replace(/<br\/>/g, '\n').replace(/\&nbsp\;/g, ' ');
+			return str1;
+		}else{
+			return '';
+		}
+	}
+	
   changeComment(e){
     this.props.actions.changeComment(e.target.value);
   }
@@ -68,17 +84,18 @@ export  class SidePanel extends Component {
         });
     }
     const newComment = this.props.newComment;
+    const parsedContent = this.setLineFeed(newComment.tr_content);
     if(newComment.id){ //edit
       console.log("edit item, id="+newComment.id);
       this.props.actions.updateItem({
             "id": newComment.id,
             "tasktype": this.props.params.tasktype,
-            "content": newComment.tr_content,
+            "content": parsedContent,
       }).then(refresh);
     }else {
       this.props.actions.saveItem({
         "tasktype": this.props.params.tasktype,
-        "content": newComment.tr_content,
+        "content": parsedContent,
         "chapterid": this.props.params.chapterid,
         "resourceid": this.props.params.resourceid,
         "recdata":JSON.stringify(newComment.recdata),
@@ -124,7 +141,7 @@ export  class SidePanel extends Component {
               className="custom"
               autosize={{ minRows: 6}}
               style={{ height: 100 }}
-              value={tr_content}
+              value={this.getLineFeed(tr_content)}
               onChange={this.changeComment.bind(this)}
               ></TextArea>
                 <Button size='small' type="primary" onClick={() => this.saveItem()}>Save</Button>
