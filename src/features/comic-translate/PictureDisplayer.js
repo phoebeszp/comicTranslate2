@@ -5,18 +5,20 @@ import { connect } from 'react-redux';
 import * as actions from './redux/actions';
 import ShetchManager from './manager/ShetchManager';
 import DragManager from './manager/DragManager';
-import { findDOMNode } from 'react-dom'
+import { findDOMNode } from 'react-dom';
+// import ImageLoader from './manager/ImageLoader';
 
 export class PictureDisplayer extends React.PureComponent {
   static propTypes = {
-    imageInfo: PropTypes.object.isRequired,
     scaleInt: PropTypes.number.isRequired,
     color: PropTypes.string.isRequired,
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     rectList: PropTypes.array.isRequired,
     onlyShowSelected: PropTypes.bool.isRequired,
-    params: PropTypes.object.isRequired
+    params: PropTypes.object.isRequired,
+    // previlege: PropTypes.object.isRequired,
+    selectedImage: PropTypes.object.isRequired,
   };
   calculatePosition(deltaX, deltaY, screenHeight,screenWidth, translateX, translateY) {
     let newX = translateX, newY = translateY;
@@ -45,6 +47,7 @@ export class PictureDisplayer extends React.PureComponent {
         ShetchManager.clearRect();
         const list = this.props.rectList;
         const onlyShowSelected = this.props.onlyShowSelected;
+        this.props.selectedImage === this.props.params.pic &&
         list.forEach(item => {
           if(item.recdata && (!onlyShowSelected || item.selected)){
             let recdata = item.recdata;
@@ -69,32 +72,14 @@ export class PictureDisplayer extends React.PureComponent {
   _callbackOfFinishDrawing(recdata) {
     this.props.actions.addComments(recdata);
   }
-  componentWillMount(){
-    let that = this;
-    const pic = this.props.params.pic;
-    const picPath = {
-      pic:{
-        width: pic.width,
-        height:pic.height,
-        url: pic.url,
-        path: `url('${pic.url}')`
-      }
-    };
-    that.props.actions.changeDisplayImage(picPath);
-  }
-  // componentWillMount(){
-  //   let that = this;
-  //   ImageLoader.init((param)=>{
-  //     let imageResource = param;
-  //     that.props.actions.changeDisplayImage({pic:imageResource[0]});
-  //   });
-  // }
   render() {
     const scaleInt = this.props.scaleInt;
-    const {height, width, path} = this.props.imageInfo;
+    const {height, width, url} = this.props.selectedImage;
+    const path = `url('${url}')`;
     const {translateX, translateY} = this.props.isDrawing;
     const isDrawing = this.props.isDrawing.processing < 1;
-    let picStyle = {backgroundImage: path,
+    let picStyle = {
+        backgroundImage: path,
         transform: `translate(${translateX}px, ${translateY}px) scale(${scaleInt})`,
         width: `${width}px`,
         cursor: isDrawing?`pointer`:`move`
@@ -112,18 +97,23 @@ export class PictureDisplayer extends React.PureComponent {
 /* istanbul ignore next */
 function mapStateToProps(state) {
   return {
-    imageInfo: state.comicTranslate.selectedImage,
     scaleInt: state.comicTranslate.scaleInt,
     color: state.comicTranslate.color,
     isDrawing: state.comicTranslate.isDrawing,
     rectList : state.comicTranslate.comment.list,
     onlyShowSelected : state.comicTranslate.comment.onlyShowSelected,
-    params: state.comicTranslate.params
+    params: state.comicTranslate.params,
+    selectedImage: state.comicTranslate.selectedImage,
+    // previlege: state.comicTranslate.previlege
   };
 }
 
 /* istanbul ignore next */
 function mapDispatchToProps(dispatch) {
+//   ImageLoader.init((param)=>{
+//     // imageResource = param;
+//     // dispatch(Actions.changeImage({pic:imageResource[INITIAL_SELECTED_VALUE]}));
+// });
   return {
     actions: bindActionCreators({ ...actions }, dispatch)
   };

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
-import { Button, Icon, Row, Col } from 'antd';
+import { Button, Icon, Row, Col,Radio } from 'antd';
 
 const SCALE_REATES=[10, 25, 50, 75, 100];
 const COLORS =['#ffffff', '#000000','#0000ff', '#00ff00', '#ff0000']
@@ -13,9 +13,26 @@ export class OperationPanel extends Component {
     color: PropTypes.string.isRequired,
     isDrawing: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    previlege: PropTypes.object.isRequired
+    previlege: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
   };
-
+  state = {
+    selectedOption:0
+  }
+  onChangeSelection = e => {
+    let selectedValue = e.target.value;
+    this.setState({
+      selectedOption: e.target.value,
+    });
+    let selectedPic = this.props.params.params.pic;
+    if(selectedValue ===1){
+      selectedPic = this.props.params.designPic;
+    }
+    this.props.actions.changeDisplayImage({pic:selectedPic})
+  };
+  componentDidMount(){
+    this.props.actions.changeDisplayImage({pic: this.props.params.pic});
+  }
   render() {
     let scaleInt = this.props.scaleInt;
     let isDrawing = this.props.isDrawing.processing < 1;
@@ -49,6 +66,14 @@ export class OperationPanel extends Component {
                   )
                 }
               </Col>)}
+              {this.props.previlege.showDesignPic && (
+                <Col span={8}>
+                      <Radio.Group onChange={this.onChangeSelection} value={this.state.selectedOption}>
+                        <Radio value={0}>Raw</Radio>
+                        <Radio value={1}>Design</Radio>
+                      </Radio.Group>
+                </Col>
+              )}
             </Row>
       </div>
     );
@@ -61,7 +86,8 @@ function mapStateToProps(state) {
     scaleInt: state.comicTranslate.scaleInt,
     color: state.comicTranslate.color,
     isDrawing: state.comicTranslate.isDrawing,
-    previlege: state.comicTranslate.previlege
+    previlege: state.comicTranslate.previlege,
+    params: state.comicTranslate.params
   };
 }
 

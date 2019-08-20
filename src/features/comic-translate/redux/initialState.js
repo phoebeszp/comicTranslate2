@@ -13,8 +13,7 @@ const initialState = {
         chapternum: '',
         resourcenum:''
     },
-    selectedImage: {
-    },
+    selectedImage: {},
     scaleInt: 1, 
     color: '#fffffff',
     isDrawing: {
@@ -35,11 +34,16 @@ const initialState = {
         chapterid: window.chapterid,
         resourceid: window.resourceid,
         tasktype: window.tasktype,
-        pic: window.pic
+        pic: window.pic,
+        designPic: {width:window.designPic&&window.designPic.ds_width, 
+            height:window.designPic&&window.designPic.ds_height, 
+            url:window.designPic&&window.designPic.url
+        }
     },
     previlege:{
         editable: window.tasktype=='1' || window.tasktype =='3',
-        showTr_content: window.tasktype=='1' || window.tasktype =='2'
+        showTr_content: window.tasktype=='1' || window.tasktype =='2',
+        showDesignPic: window.tasktype =='6'
     }
 };
 

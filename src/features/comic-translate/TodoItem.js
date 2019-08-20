@@ -19,16 +19,18 @@ export class TodoItem extends Component {
 		}
 	}
   render () {
-    const {updatetime, tr_content, selected, ed_content} = this.props.item;
+    const {updatetime, tr_content, selected, ed_content, id} = this.props.item;
     let showContent = this.props.previlege.showTr_content ? tr_content:ed_content;
     showContent = this.getLineFeed(showContent); 
     return (
-      <div className="item-container" onClick={this.props.selectItem} style={{cursor: 'pointer', 
+      <div  key={id} className="item-container" onClick={this.props.selectItem} style={{cursor: 'pointer', 
       backgroundColor: selected?'#e1e1ff':''}}>
-        <Text>{updatetime}</Text>
+        <div className="title">{updatetime}</div>
+        <div className="content">
         {showContent.map(ele=>
           <p>{ele}</p>
         )}
+        </div>
       </div>
     )
   }
