@@ -22,7 +22,7 @@ const initialState = {
         translateY: 0
     },
     comment:{
-        list: window.resourceContentList?window.resourceContentList:[],
+        list: window.resourceContentList?window.resourceContentList:[{tr_content:"第一行第二行测试", updatetime:"2019-10-23"}],
         newComment: {
             tr_content: "",
             recdata:""

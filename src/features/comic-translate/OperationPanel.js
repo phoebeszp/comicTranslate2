@@ -24,7 +24,7 @@ export class OperationPanel extends Component {
     this.setState({
       selectedOption: e.target.value,
     });
-    let selectedPic = this.props.params.params.pic;
+    let selectedPic = this.props.params.pic;
     if(selectedValue ===1){
       selectedPic = this.props.params.designPic;
     }

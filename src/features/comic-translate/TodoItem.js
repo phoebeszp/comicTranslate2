@@ -24,13 +24,11 @@ export class TodoItem extends Component {
     showContent = this.getLineFeed(showContent); 
     return (
       <div  key={id} className="item-container" onClick={this.props.selectItem} style={{cursor: 'pointer', 
-      backgroundColor: selected?'#e1e1ff':''}}>
-        <div className="title">{updatetime}</div>
-        <div className="content">
+      backgroundColor: selected?'#D8EDF9':''}}>
+        <Text className="title">{updatetime}</Text>
         {showContent.map(ele=>
           <p>{ele}</p>
         )}
-        </div>
       </div>
     )
   }
