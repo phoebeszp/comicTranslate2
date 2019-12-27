@@ -41,7 +41,7 @@ const initialState = {
         }
     },
     previlege:{
-        editable: window.tasktype=='1' || window.tasktype =='3',
+        editable: window.tasktype=='1' || window.tasktype =='3' || window.tasktype =='4',
         showTr_content: window.tasktype=='1' || window.tasktype =='2',
         showDesignPic: window.tasktype =='6'
     }
