@@ -15,14 +15,14 @@ const initialState = {
     },
     selectedImage: {},
     scaleInt: 1, 
-    color: '#fffffff',
+    color: '#ff0000',
     isDrawing: {
         processing: 2, // 2: not scketch, 1:add comment, 0:processing
         translateX: 0,
         translateY: 0
     },
     comment:{
-        list: window.resourceContentList?window.resourceContentList:[{tr_content:"第一行第二行测试", updatetime:"2019-10-23"}],
+        list: window.resourceContentList?window.resourceContentList:[],
         newComment: {
             tr_content: "",
             recdata:""
@@ -35,7 +35,7 @@ const initialState = {
         resourceid: window.resourceid,
         tasktype: window.tasktype,
         pic: window.pic,
-        designPic: {width:window.designPic&&window.designPic.ds_width, 
+        designPic: {width: window.designPic&&window.designPic.ds_width, 
             height:window.designPic&&window.designPic.ds_height, 
             url:window.designPic&&window.designPic.url
         }

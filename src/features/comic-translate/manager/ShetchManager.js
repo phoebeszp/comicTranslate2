@@ -83,4 +83,8 @@ export default class ShetchManager {
     static clearRect(){
         tool.clear();
     }
+    static changeScrollbar (y, x) {
+        document.getElementsByClassName("comic-translate-picture-displayer")[0].scrollTop = y;
+        document.getElementsByClassName("comic-translate-picture-displayer")[0].scrollLeft  = x;
+    }
 }

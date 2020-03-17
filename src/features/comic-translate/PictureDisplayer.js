@@ -55,6 +55,10 @@ export class PictureDisplayer extends React.PureComponent {
               recdata = JSON.parse(recdata);
             }
             ShetchManager.draw(recdata);
+            if(item.selected) {
+              const scaleInt = this.props.scaleInt;
+              ShetchManager.changeScrollbar(recdata.start.y*scaleInt, recdata.start.x*scaleInt);
+            }
           }
         });
       }

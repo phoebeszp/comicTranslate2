@@ -75,13 +75,20 @@ export  class SidePanel extends Component {
 
   saveItem(){
     const that = this;
-    function refresh(){
+    function refresh(oResult){
+      if(oResult.status === 'error') {
+        message.error(oResult.message);
+        return;
+      }
       message.success('Save successfully!');
       that.props.actions.saveComment();
       that.props.actions.fetchData({
             "chapterid": that.props.params.chapterid,
             "resourceid": that.props.params.resourceid
         });
+    }
+    function reject(e) {
+      message.error(e.message);
     }
     const newComment = this.props.newComment;
     const parsedContent = this.setLineFeed(newComment.tr_content);
@@ -91,7 +98,7 @@ export  class SidePanel extends Component {
             "id": newComment.id,
             "tasktype": this.props.params.tasktype,
             "content": parsedContent,
-      }).then(refresh);
+      }).then(refresh, reject);
     }else {
       this.props.actions.saveItem({
         "tasktype": this.props.params.tasktype,
@@ -99,7 +106,7 @@ export  class SidePanel extends Component {
         "chapterid": this.props.params.chapterid,
         "resourceid": this.props.params.resourceid,
         "recdata":JSON.stringify(newComment.recdata),
-      }).then(refresh);
+      }).then(refresh, reject);
     }
   }
   
