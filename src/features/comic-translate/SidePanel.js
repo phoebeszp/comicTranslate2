@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { List, Button, Input, Tabs,Modal, message } from 'antd';
+import { List, Button, Input, Tabs, Modal, message } from 'antd';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
-import {TodoItem} from './';
-export  class SidePanel extends Component {
+import { TodoItem } from './';
+export class SidePanel extends Component {
   static propTypes = {
     defaultActiveKey: PropTypes.string.isRequired,
     tr_content: PropTypes.string.isRequired,
@@ -16,100 +16,102 @@ export  class SidePanel extends Component {
     params: PropTypes.object.isRequired,
     previlege: PropTypes.object.isRequired
   };
-  
-  state = { visible: false, selectedItem: null};
-	setLineFeed (str){
-		if(typeof str  === 'string' ){
-		  let str1 = str.replace(/\r{0,}\n/g, '<br/>').replace(/\s/g, '&nbsp;');
-			return str1;
-		}else{
-			return '';
-		}
+
+  state = { visible: false, selectedItem: null, saveButtonDisabled: false };
+  setLineFeed(str) {
+    if (typeof str === 'string') {
+      let str1 = str.replace(/\r{0,}\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+      return str1;
+    } else {
+      return '';
+    }
   }
-  getLineFeed (str){
-		if(typeof str  === 'string' ){
-		let str1 = str.replace(/<br\/>/g, '\n').replace(/\&nbsp\;/g, ' ');
-			return str1;
-		}else{
-			return '';
-		}
-	}
-	
-  changeComment(e){
+  getLineFeed(str) {
+    if (typeof str === 'string') {
+      let str1 = str.replace(/<br\/>/g, '\n').replace(/\&nbsp\;/g, ' ');
+      return str1;
+    } else {
+      return '';
+    }
+  }
+
+  changeComment(e) {
     this.props.actions.changeComment(e.target.value);
   }
-  editComment(item){
+  editComment(item) {
     this.props.actions.showSelectedComment(this.state.selectedItem);
   }
 
-  deselectComment(){
+  deselectComment() {
     this.props.actions.deSelectAll();
-    this.setState({selectedItem: null});
+    this.setState({ selectedItem: null });
   }
 
-  removeComment(){
-    this.setState({ visible: true});
+  removeComment() {
+    this.setState({ visible: true });
   }
-  handleModal(confirmed){
-    if(confirmed){
+  handleModal(confirmed) {
+    if (confirmed) {
       this.props.actions.deleteItem({
-        "id":this.state.selectedItem.id,
-        "tasktype":this.props.params.tasktype
-      }).then(()=>{
+        "id": this.state.selectedItem.id,
+        "tasktype": this.props.params.tasktype
+      }).then(() => {
         message.success('Save successfully!');
         this.props.actions.removeComment(this.state.selectedItem.recdata);
-        this.setState({visible: false, selectedItem: null});
+        this.setState({ visible: false, selectedItem: null });
         this.props.actions.fetchData({
-            "chapterid": this.props.params.chapterid,
-            "resourceid": this.props.params.resourceid
+          "chapterid": this.props.params.chapterid,
+          "resourceid": this.props.params.resourceid
         });
       });
-    }else{
-      this.setState({visible: false});
+    } else {
+      this.setState({ visible: false });
     }
   }
-  selectItem(item){
+  selectItem(item) {
     this.props.actions.showSelectedRect(item);
     this.setState({ selectedItem: item });
   }
 
-  saveItem(){
-    const that = this;
-    function refresh(oResult){
-      if(oResult.status === 'error') {
+  saveItem() {
+    const refresh = (oResult) => {
+      if (oResult.status === 'error') {
         message.error(oResult.message);
         return;
       }
+      this.setState({ saveButtonDisabled: false });
       message.success('Save successfully!');
-      that.props.actions.saveComment();
-      that.props.actions.fetchData({
-            "chapterid": that.props.params.chapterid,
-            "resourceid": that.props.params.resourceid
-        });
+      this.props.actions.saveComment();
+      this.props.actions.fetchData({
+        "chapterid": this.props.params.chapterid,
+        "resourceid": this.props.params.resourceid
+      });
     }
-    function reject(e) {
+    const reject = (e) => {
+      this.setState({ saveButtonDisabled: false });
       message.error(e.message);
     }
     const newComment = this.props.newComment;
     const parsedContent = this.setLineFeed(newComment.tr_content);
-    if(newComment.id){ //edit
-      console.log("edit item, id="+newComment.id);
+    this.setState({ saveButtonDisabled: true });
+    if (newComment.id) { //edit
+      console.log("edit item, id=" + newComment.id);
       this.props.actions.updateItem({
-            "id": newComment.id,
-            "tasktype": this.props.params.tasktype,
-            "content": parsedContent,
+        "id": newComment.id,
+        "tasktype": this.props.params.tasktype,
+        "content": parsedContent,
       }).then(refresh, reject);
-    }else {
+    } else {
       this.props.actions.saveItem({
         "tasktype": this.props.params.tasktype,
         "content": parsedContent,
         "chapterid": this.props.params.chapterid,
         "resourceid": this.props.params.resourceid,
-        "recdata":JSON.stringify(newComment.recdata),
+        "recdata": JSON.stringify(newComment.recdata),
       }).then(refresh, reject);
     }
   }
-  
+
   render() {
     message.config({
       top: 80,
@@ -118,15 +120,15 @@ export  class SidePanel extends Component {
     });
     const { TabPane } = Tabs;
     const { TextArea } = Input;
-    const {comments, tr_content, defaultActiveKey} = this.props;
+    const { comments, tr_content, defaultActiveKey } = this.props;
     const ButtonGroup = Button.Group;
     return (
       <div className="comic-translate-side-panel">
         <Modal
           title="Warning"
           visible={this.state.visible}
-          onOk={()=>this.handleModal(true)}
-          onCancel={()=>this.handleModal(false)}
+          onOk={() => this.handleModal(true)}
+          onCancel={() => this.handleModal(false)}
           okText="Confirm"
           cancelText="Cancel"
         >
@@ -135,8 +137,8 @@ export  class SidePanel extends Component {
         <Modal
           title="Info"
           visible={this.state.visible}
-          onOk={()=>this.handleModal(true)}
-          onCancel={()=>this.handleModal(false)}
+          onOk={() => this.handleModal(true)}
+          onCancel={() => this.handleModal(false)}
           okText="Confirm"
           cancelText="Cancel"
         >
@@ -146,37 +148,37 @@ export  class SidePanel extends Component {
           <TabPane tab="New" key="1" >
             <TextArea placeholder="input here"
               className="custom"
-              autosize={{ minRows: 6}}
+              autosize={{ minRows: 6 }}
               style={{ height: 100 }}
               value={this.getLineFeed(tr_content)}
               onChange={this.changeComment.bind(this)}
-              ></TextArea>
-                <Button size='small' type="primary" onClick={() => this.saveItem()}>Save</Button>
-                <Button size='small' onClick={this.props.actions.cancelComment}>Cancel</Button>
+            ></TextArea>
+            <Button size='small' type="primary" onClick={() => this.saveItem()} disabled={this.state.saveButtonDisabled}>Save</Button>
+            <Button size='small' onClick={this.props.actions.cancelComment}>Cancel</Button>
           </TabPane>
           <TabPane tab="List" key="2" >
             <div>
-            <ButtonGroup>
-              {this.props.previlege.editable && (
-              <Button icon='edit' onClick={() => this.editComment()} disabled={!this.state.selectedItem} 
-              >Edit</Button>)}
-              {this.props.previlege.editable && (
-              <Button icon="delete" onClick={() => this.removeComment()} 
-              disabled={!this.state.selectedItem}>Delete</Button>)}
-              <Button icon='select' onClick={() => this.deselectComment()} disabled={!this.state.selectedItem}>Show All</Button>
-            </ButtonGroup>
+              <ButtonGroup>
+                {this.props.previlege.editable && (
+                  <Button icon='edit' onClick={() => this.editComment()} disabled={!this.state.selectedItem}
+                  >Edit</Button>)}
+                {this.props.previlege.editable && (
+                  <Button icon="delete" onClick={() => this.removeComment()}
+                    disabled={!this.state.selectedItem}>Delete</Button>)}
+                <Button icon='select' onClick={() => this.deselectComment()} disabled={!this.state.selectedItem}>Show All</Button>
+              </ButtonGroup>
             </div>
             <List
-            itemLayout="horizontal"
-            dataSource={comments}
-            renderItem={item => (
-             <List.Item> 
-                <TodoItem item={item} 
-                selectItem={ () => this.selectItem(item)}
-                ></TodoItem>
-              </List.Item>
-            )}
-          />
+              itemLayout="horizontal"
+              dataSource={comments}
+              renderItem={item => (
+                <List.Item>
+                  <TodoItem item={item}
+                    selectItem={() => this.selectItem(item)}
+                  ></TodoItem>
+                </List.Item>
+              )}
+            />
           </TabPane>
         </Tabs>
       </div>
